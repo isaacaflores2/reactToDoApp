@@ -1,13 +1,18 @@
 import React from 'react';
+import ToDoItem from "./ToDoItem";
 
-function Todolist ({name}){
+function Todolist ({name, items}){
     return(
         <div>
             <header>
                 <h1>{name}</h1>
-            </header>            
-            <input type="checkbox" id="item1" ></input>
-            <label for="item1">Clean room</label>
+            </header>
+
+            {items.map((item,i) => 
+                    <ToDoItem name={item} id={i}/>
+                
+            )}  
+
         </div>
     );
 }

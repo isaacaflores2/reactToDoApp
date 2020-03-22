@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import TodoList from './TodoList'
 import SideNav from './SideNav';
 import Todo from './modules/Todo';

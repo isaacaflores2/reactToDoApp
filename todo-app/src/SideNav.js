@@ -1,4 +1,5 @@
 import React from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class SideNav extends React.Component{
     constructor(props){
@@ -14,10 +15,10 @@ class SideNav extends React.Component{
     render(){
         const todos = this.props.todos;
         return(
-            <div>
-                <ul>
+            <div className="sidebar-sticky">
+                <ul className="nav flex-column">    
                     {todos.map((todo) =>
-                        <li key={todo.id} id={todo.id} onClick={this.handleTodoNavSelect}>
+                        <li className="nav-item" key={todo.id} id={todo.id} onClick={this.handleTodoNavSelect}>
                             {todo.name} 
                         </li>
                     )}

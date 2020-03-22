@@ -17,23 +17,29 @@ class TodoList extends React.Component{
     handleNewItem(event){
         event.preventDefault();
 
+        if(this.state.itemText.length === 0){
+            return; 
+        }
+
         const newItem = this.state.itemText;
+        
         this.setState( state => ({
             items: state.items.concat(newItem),
             itemText: ''
         }) );
+
+        this.props.onNewItem(this.props.id, newItem);
     }
 
 
     render(){
-        const items = this.state.items;
         return(           
             <div>
                 <header>
-                    <h1>{this.props.name}</h1>
+                    <h1>{this.props.todo.name}</h1>
                 </header>
     
-                {items.map((item,i) => 
+                {this.props.todo.items.map((item,i) => 
                         <ToDoItem key={item} name={item} id={i}/>                
                 )}
                 <form onSubmit={this.handleNewItem}>

@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
 import TodoList from './TodoList'
+import SideNav from './SideNav';
+import Todo from './modules/Todo';
 
 class App extends React.Component{
 
@@ -8,7 +10,11 @@ class App extends React.Component{
     super(props);
     this.handleTodoNameChange = this.handleTodoNameChange.bind(this);
     this.handleNewTodoList = this.handleNewTodoList.bind(this);
-    this.state = {todos: [], newTodoName: ''};
+    this.handleTodoUpdate = this.handleTodoUpdate.bind(this);
+    this.handleNavSelect = this.handleNavSelect.bind(this);
+    
+
+    this.state = {todos: [], todoToDisplayId: 0, newTodoName: ''};
   }
 
   handleTodoNameChange(event){
@@ -17,26 +23,52 @@ class App extends React.Component{
 
   handleNewTodoList(event){
     event.preventDefault();
-    const newTodoListName = this.state.newTodoName;
+
+    if(this.state.newTodoName.length === 0){
+      return; 
+    }
+
+    const newTodo = new Todo(
+      this.state.todos.length,
+      this.state.newTodoName
+    );
+
     this.setState(state => ({
-      todos: this.state.todos.concat(newTodoListName),
+      todos: this.state.todos.concat(newTodo),
       newTodoName: ''
     }));
   }
 
+  handleNavSelect(todoListId){
+    this.setState({todoToDisplayId: todoListId })
+  }
+
+  handleTodoUpdate(id, value){    
+    const updatedTodos = this.state.todos;
+    updatedTodos[id].addItem(value);
+    this.setState({todos: updatedTodos});
+  }
+
   render(){
     const todos = this.state.todos;
+    const todoId = this.state.todoToDisplayId;
+
     return (
       <div className="App">
-        {todos.map(todoName => 
-          <TodoList key={todoName} name={todoName}/>
-        )}
 
+        {this.state.todos.length > 0 &&          
+          <div>
+            <SideNav todos={todos} onTodoSelect={this.handleNavSelect}/>
+            <TodoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>
+          </div>
+        }
+        
         <form onSubmit={this.handleNewTodoList}>
           <label htmlFor="newTodoList"/>
           <input id="newTodoList" onChange={this.handleTodoNameChange} value={this.state.newTodoName}/>
           <button>Add list</button>
-        </form>        
+        </form>    
+
       </div>
       
     );

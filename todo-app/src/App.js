@@ -68,7 +68,7 @@ class App extends React.Component{
               <SideNav todos={todos} onTodoSelect={this.handleNavSelect}>
                 <form onSubmit={this.handleNewTodoList}>
                   <label htmlFor="newTodoList"/>
-                    <input className="form-control bg-transparent" placeholder="My new ToDo list" id="newTodoList" onChange={this.handleTodoNameChange} value={this.state.newTodoName}/>
+                    <input className="form-control bg-transparent text-light" placeholder="My new ToDo list" id="newTodoList" onChange={this.handleTodoNameChange} value={this.state.newTodoName}/>
                   {/* <button className="">Add list</button> */}
                 </form>
               </SideNav> 

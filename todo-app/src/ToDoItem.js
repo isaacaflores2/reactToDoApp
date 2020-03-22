@@ -4,7 +4,7 @@ function ToDoItem ({name, id}){
     return (
         <div>          
             <input type="checkbox" id={id} value={name}></input>
-            <label htmlFor={name}>{name}</label>
+            <label className="h6" htmlFor={name}>{name}</label>
         </div>
     )
 }

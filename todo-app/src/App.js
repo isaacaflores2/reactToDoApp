@@ -1,8 +1,10 @@
 import React from 'react';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import TodoList from './TodoList'
 import SideNav from './SideNav';
 import Todo from './modules/Todo';
+import Header from './Header';
 
 class App extends React.Component{
 
@@ -54,23 +56,28 @@ class App extends React.Component{
     const todoId = this.state.todoToDisplayId;
 
     return (
-      <div className="App">
+        <div className="container-fluid">
+          <Header/>
+          <div className="row">          
+            <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+              <SideNav todos={todos} onTodoSelect={this.handleNavSelect}/>
+            </nav>
+            <div className="col">
+              {this.state.todos.length > 0 &&          
+                  <div>              
+                    <TodoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>
+                  </div>
+              }
 
-        {this.state.todos.length > 0 &&          
-          <div>
-            <SideNav todos={todos} onTodoSelect={this.handleNavSelect}/>
-            <TodoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>
-          </div>
-        }
-        
-        <form onSubmit={this.handleNewTodoList}>
-          <label htmlFor="newTodoList"/>
-          <input id="newTodoList" onChange={this.handleTodoNameChange} value={this.state.newTodoName}/>
-          <button>Add list</button>
-        </form>    
-
-      </div>
-      
+              <form onSubmit={this.handleNewTodoList}>
+                <label htmlFor="newTodoList"/>
+                <input id="newTodoList" onChange={this.handleTodoNameChange} value={this.state.newTodoName}/>
+                <button>Add list</button>
+              </form>    
+            </div>
+          </div>  
+        </div>
+            
     );
   }
 }

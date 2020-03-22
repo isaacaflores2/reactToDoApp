@@ -1,5 +1,4 @@
 import React from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 class SideNav extends React.Component{
     constructor(props){

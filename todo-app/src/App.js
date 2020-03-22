@@ -1,11 +1,10 @@
 import React from 'react';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import TodoList from './TodoList'
 import SideNav from './SideNav';
 import Todo from './modules/Todo';
-import Navbar from 'react-bootstrap/Navbar'
-import Container from 'react-bootstrap/Container';
-
+import {Navbar, Container, Row, Col} from 'react-bootstrap';
 
 class App extends React.Component{
 
@@ -57,31 +56,31 @@ class App extends React.Component{
     const todoId = this.state.todoToDisplayId;
 
     return (
-        <Container>
-
-          {/* <Navbar fixed="top">ToDoApp</Navbar> */}
-
-          <div className="row">          
-            <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-              <SideNav todos={todos} onTodoSelect={this.handleNavSelect}/>
-            </nav>
-            <div className="col">
-              {this.state.todos.length > 0 &&          
-                  <div>              
-                    <TodoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>
-                  </div>
-              }
-
+        <>
+        <Navbar bg="dark" variant="dark">
+              <Navbar.Brand href="#home">To Do</Navbar.Brand>
+        </Navbar>
+        
+        <Container fluid>
+          <Row>
+            <Col md="auto">
+            <SideNav todos={todos} onTodoSelect={this.handleNavSelect}/>
               <form onSubmit={this.handleNewTodoList}>
                 <label htmlFor="newTodoList"/>
                 <input id="newTodoList" onChange={this.handleTodoNameChange} value={this.state.newTodoName}/>
                 <button>Add list</button>
-              </form>    
-            </div>
-          </div>  
-
+              </form> 
+            </Col>          
+            <Col>
+              {this.state.todos.length > 0 &&          
+                  <div>              
+                    <TodoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>
+                  </div>
+              }                 
+            </Col>
+          </Row>  
         </Container>
-            
+        </>
     );
   }
 }

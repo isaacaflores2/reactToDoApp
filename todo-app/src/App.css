@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.transparent-input {
+  background-color: rgba(0, 0, 0, 0);
+  border: darkgray;
+}
+
+li:hover {
+  background-color: #2c2e2c;
+}

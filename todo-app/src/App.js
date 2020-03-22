@@ -1,6 +1,7 @@
 import React from 'react';
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+import './dashboard.css';
 import TodoList from './TodoList'
 import SideNav from './SideNav';
 import Todo from './modules/Todo';
@@ -57,29 +58,30 @@ class App extends React.Component{
 
     return (
         <>
-        <Navbar bg="dark" variant="dark">
-              <Navbar.Brand href="#home">To Do</Navbar.Brand>
-        </Navbar>
+          <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" >To Do</a>
+          </nav>
         
-        <Container fluid>
-          <Row>
-            <Col md="auto">
-            <SideNav todos={todos} onTodoSelect={this.handleNavSelect}/>
-              <form onSubmit={this.handleNewTodoList}>
-                <label htmlFor="newTodoList"/>
-                <input id="newTodoList" onChange={this.handleTodoNameChange} value={this.state.newTodoName}/>
-                <button>Add list</button>
-              </form> 
-            </Col>          
-            <Col>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <SideNav todos={todos} onTodoSelect={this.handleNavSelect}>
+                <form onSubmit={this.handleNewTodoList}>
+                  <label htmlFor="newTodoList"/>
+                    <input className="form-control bg-transparent" placeholder="My new ToDo list" id="newTodoList" onChange={this.handleTodoNameChange} value={this.state.newTodoName}/>
+                  {/* <button className="">Add list</button> */}
+                </form>
+              </SideNav> 
+            </div>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
               {this.state.todos.length > 0 &&          
-                  <div>              
-                    <TodoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>
-                  </div>
-              }                 
-            </Col>
-          </Row>  
-        </Container>
+                    <div>              
+                      <TodoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>
+                    </div>
+                }
+            </main>          
+          </div>  
+        </div>
         </>
     );
   }

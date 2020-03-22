@@ -44,8 +44,8 @@ class TodoList extends React.Component{
                 )}
                 <form onSubmit={this.handleNewItem}>
                     <label htmlFor="newItem"/>
-                    <input className="form-control-sm" placeholder="New item" id="newItem" onChange={this.handleTextChange} value={this.state.itemText}/>
-                    <button>Add</button>
+                    <input className="form-control-sm bg-transparent" placeholder="New item" id="newItem" onChange={this.handleTextChange} value={this.state.itemText}/>
+                    <button type="button" className="btn btn-light">Add</button>
                 </form>  
     
             </div>

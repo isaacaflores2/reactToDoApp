@@ -3,7 +3,9 @@ import './App.css';
 import TodoList from './TodoList'
 import SideNav from './SideNav';
 import Todo from './modules/Todo';
-import Header from './Header';
+import Navbar from 'react-bootstrap/Navbar'
+import Container from 'react-bootstrap/Container';
+
 
 class App extends React.Component{
 
@@ -55,8 +57,10 @@ class App extends React.Component{
     const todoId = this.state.todoToDisplayId;
 
     return (
-        <div className="container-fluid">
-          <Header/>
+        <Container>
+
+          {/* <Navbar fixed="top">ToDoApp</Navbar> */}
+
           <div className="row">          
             <nav className="col-md-2 d-none d-md-block bg-light sidebar">
               <SideNav todos={todos} onTodoSelect={this.handleNavSelect}/>
@@ -75,7 +79,8 @@ class App extends React.Component{
               </form>    
             </div>
           </div>  
-        </div>
+
+        </Container>
             
     );
   }

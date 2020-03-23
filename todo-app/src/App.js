@@ -1,9 +1,9 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import './dashboard.css';
-import TodoList from './TodoList'
-import SideNav from './SideNav';
+import './styles/dashboard.css';
+import TodoList from './components/TodoList'
+import SideNav from './components/SideNav';
 import Todo from './modules/Todo';
 import {Navbar, Container, Row, Col} from 'react-bootstrap';
 

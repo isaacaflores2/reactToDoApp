@@ -7,7 +7,8 @@ class TodoList extends React.Component{
         super(props);
         this.handleTextChange = this.handleTextChange.bind(this);        
         this.handleNewItem = this.handleNewItem.bind(this);
-        this.state = {items: [], itemText: ''};
+
+        this.state = {itemText: ''};
     }
 
     handleTextChange(event){
@@ -24,13 +25,11 @@ class TodoList extends React.Component{
         const newItem = this.state.itemText;
         
         this.setState( state => ({
-            items: state.items.concat(newItem),
             itemText: ''
         }) );
 
         this.props.onNewItem(this.props.id, newItem);
     }
-
 
     render(){
         return(           
@@ -40,8 +39,9 @@ class TodoList extends React.Component{
                 </header>
     
                 {this.props.todo.items.map((item,i) => 
-                        <ToDoItem key={item} name={item} id={i}/>                
+                    <ToDoItem key={item} name={item} id={i}/>                
                 )}
+
                 <form onSubmit={this.handleNewItem}>
                     <label htmlFor="newItem"/>
                     <input className="form-control-sm bg-transparent" placeholder="New item" id="newItem" onChange={this.handleTextChange} value={this.state.itemText}/>

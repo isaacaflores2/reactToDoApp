@@ -1,12 +1,14 @@
-import React from "react";
+import React from 'react';
 
-function ToDoItem ({name, id}){
-    return (
-        <div>          
-            <input type="checkbox" id={id} value={name}></input>
-            <label className="h6" htmlFor={name}>{name}</label>
-        </div>
-    )
+class ToDoItem extends React.Component{
+    render () {
+        return (
+            <div>          
+                <input type="checkbox" id={this.props.id} value={this.props.name}></input>
+                <label className="h6" htmlFor={this.props.name}>{this.props.name}</label>
+            </div>
+        )
+    };
 }
 
 export default ToDoItem;

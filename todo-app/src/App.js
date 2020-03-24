@@ -59,9 +59,9 @@ class App extends React.Component{
       <>
         <Navbar/>
 
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col">
 
               <SideNav todos={todos} onTodoSelect={this.handleNavSelect}>
                 <form onSubmit={this.handleNewTodoList}>

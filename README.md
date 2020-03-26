@@ -1,4 +1,18 @@
 # reactToDoApp
-Simple to do list project to quickly learn React using Create React App!
 ---
+A Simple to do list using React! The web app allows you to add your own todo list and items per list. 
+
+# Motivation
+---
+I decided to create this project so I could quickly learn React basics. 
+
+# Screenshot
 ![](img/todo-app-screenshot.png)
+
+# Technologies
+---
+1. [React](https://reactjs.org/)
+2. [Create React App](https://create-react-app.dev/)
+3. [React Testing Library](https://github.com/testing-library/react-testing-library)
+
+

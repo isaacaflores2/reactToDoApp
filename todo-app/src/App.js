@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import './styles/dashboard.css';
-import TodoList from './components/ToDoList/ToDoList';
+import ToDoList from './components/ToDoList/ToDoList';
 import SideNav from './components/SideNav/SideNav';
 import NavBar from './components/NavBar/NavBar';
 import Main from './components/Main/Main';

@@ -17,7 +17,7 @@ class ToDoList extends React.Component{
 
     handleNewItem(event){
         event.preventDefault();
-
+        
         if(this.state.itemText.length === 0){
             return; 
         }
@@ -44,8 +44,8 @@ class ToDoList extends React.Component{
 
                 <form data-testid='list-form' onSubmit={this.handleNewItem}>
                     <label htmlFor="newItem"/>
-                    <input className="form-control-sm bg-transparent" placeholder="New item" id="newItem" onChange={this.handleTextChange} value={this.state.itemText}/>
-                    <button type="submit" className="btn btn-light">Add</button>
+                    <input className="form-control-sm bg-transparent" placeholder="New item" id="newItem" onChange={(this.handleTextChange)} value={this.state.itemText}/>
+                    <button data-testid='new-item-button' type="submit" className="btn btn-light">Add</button>
                 </form>  
     
             </div>

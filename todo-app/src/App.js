@@ -57,13 +57,13 @@ class App extends React.Component{
 
     return (
       <>
-        <NavBar/>
+        <NavBar data-testid='navbar'/>
 
         <div className="container-fluid">
           <div className="row">
             <div className="col">
 
-              <SideNav todos={todos} onTodoSelect={this.handleNavSelect}>
+              <SideNav data-testid='sidenav' todos={todos} onTodoSelect={this.handleNavSelect}>
                 <form onSubmit={this.handleNewTodoList}>
                   <label htmlFor="newTodoList"/>
                     <input className="form-control bg-transparent text-light" placeholder="My new ToDo list" id="newTodoList" onChange={this.handleTodoNameChange} value={this.state.newTodoName}/>
@@ -72,7 +72,7 @@ class App extends React.Component{
               </SideNav> 
             </div>
 
-            <Main>
+            <Main data-testid='main'>
               {this.state.todos.length > 0 &&          
                 <div>              
                   <ToDoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>

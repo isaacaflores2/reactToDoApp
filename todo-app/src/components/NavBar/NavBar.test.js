@@ -6,7 +6,7 @@ import '@testing-library/jest-dom/extend-expect';
 
 
 test('<NavBar/>', () =>{
-    const {debug, getByTestId} = render(<NavBar/>);
+    const {getByTestId} = render(<NavBar/>);
 
-    expect(getByTestId('header').textContent).toBe('To Do');
+    expect(getByTestId('navbar').textContent).toBe('To Do');
 });

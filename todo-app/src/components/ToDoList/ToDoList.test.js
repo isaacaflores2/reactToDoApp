@@ -1,6 +1,6 @@
 import React from 'react';
 import ToDoList from './ToDoList';
-import ToDo from '../../modules/Todo'
+import ToDo from '../../modules/ToDo'
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
@@ -16,7 +16,7 @@ test('<ToDoList/>', () =>{
         <ToDoList key={1} id={1} todo={exampleToDo} onNewItem={onNewItemHandle} />
     );
 
-    expect(getByTestId('header').textContent).toBe('Example List');
+    expect(getByTestId('todolist-header').textContent).toBe('Example List');
     expect(getByText('Test Code')).toBeInTheDocument();
     expect(queryAllByTestId('list-form')).toBeTruthy();
 

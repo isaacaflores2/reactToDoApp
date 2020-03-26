@@ -1,6 +1,6 @@
 import React from 'react';
 import SideNav from './SideNav'
-import ToDo from '../../modules/Todo'
+import ToDo from '../../modules/ToDo'
 import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 

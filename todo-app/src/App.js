@@ -5,7 +5,7 @@ import ToDoList from './components/ToDoList/ToDoList';
 import SideNav from './components/SideNav/SideNav';
 import NavBar from './components/NavBar/NavBar';
 import Main from './components/Main/Main';
-import ToDo from './modules/Todo';
+import ToDo from './modules/ToDo';
 
 class App extends React.Component{
 
@@ -16,7 +16,7 @@ class App extends React.Component{
     this.handleTodoUpdate = this.handleTodoUpdate.bind(this);
     this.handleNavSelect = this.handleNavSelect.bind(this);
     
-    this.state = {todos: [], todoToDisplayId: 0, newTodoName: ''};
+    this.state = {todos: this.props.todos, todoToDisplayId: 0, newTodoName: ''};
   }
 
   handleTodoNameChange(event){
@@ -57,13 +57,13 @@ class App extends React.Component{
 
     return (
       <>
-        <NavBar data-testid='navbar'/>
+        <NavBar/>
 
         <div className="container-fluid">
           <div className="row">
             <div className="col">
 
-              <SideNav data-testid='sidenav' todos={todos} onTodoSelect={this.handleNavSelect}>
+              <SideNav todos={todos} onTodoSelect={this.handleNavSelect}>
                 <form onSubmit={this.handleNewTodoList}>
                   <label htmlFor="newTodoList"/>
                     <input className="form-control bg-transparent text-light" placeholder="My new ToDo list" id="newTodoList" onChange={this.handleTodoNameChange} value={this.state.newTodoName}/>
@@ -72,7 +72,7 @@ class App extends React.Component{
               </SideNav> 
             </div>
 
-            <Main data-testid='main'>
+            <Main>
               {this.state.todos.length > 0 &&          
                 <div>              
                   <ToDoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>

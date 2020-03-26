@@ -1,19 +1,48 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import App from './App';
-import { render } from '@testing-library/react';
+import ToDo from './modules/ToDo'
+import { render, cleanup, fireEvent, getByLabelText } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-test('<App/> renders without crashing', () =>{
-    const div = document.createElement('div');
-    ReactDOM.render(<App/>, div);
+const todos = [
+    new ToDo(0, "List One"),
+    new ToDo(1, "List Two"),
+    new ToDo(2, "List Three"),
+];
+
+afterEach(cleanup);
+
+test('<App/> renders all components', () =>{
+    const {getByTestId} = render(<App todos={todos}/>);
+    
+    expect(getByTestId('navbar')).toBeInTheDocument();
+    expect(getByTestId('sidenav')).toBeInTheDocument();
+    expect(getByTestId('main')).toBeInTheDocument();
+});
+
+test('<App/> renders sidenav with list names', () =>{
+    const {getByTestId} = render(<App todos={todos}/>);
+    const sidenav = getByTestId('sidenav');
+    
+    expect(sidenav).toHaveTextContent('List One');
+    expect(sidenav).toHaveTextContent('List Two');
+    expect(sidenav).toHaveTextContent('List Three');
+});
+
+test('<App/> renders main with first todo list', () =>{
+    const {getByTestId} = render(<App todos={todos}/>);
+    const todoListHeader = getByTestId('todolist-header');
+    
+    expect(todoListHeader).toHaveTextContent('List One');
 });
 
 
-test('<App/> renders components', () =>{
-    const {getByTestId, queryAllByTestId, getByText, getByPlaceholderText} = render(<App/>);
+test('<App/> updates main with select to do', () =>{
+    const {getByTestId, getByText} = render(<App todos={todos}/>);
+    const lastTodoListName = getByTestId('todo-name-list').lastChild.textContent;
 
-    expect(queryAllByTestId('navbar')).toBeTruthy()
-    expect(queryAllByTestId('sidenav')).toBeTruthy()
-    expect(queryAllByTestId('main')).toBeTruthy()
+    fireEvent.click(getByText(lastTodoListName));
+
+    expect(getByTestId('todolist-header')).toHaveTextContent(lastTodoListName);
 });
+

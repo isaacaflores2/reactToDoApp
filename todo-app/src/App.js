@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
 import './styles/dashboard.css';
-import TodoList from './components/TodoList';
-import SideNav from './components/SideNav';
-import Navbar from './components/NavBar';
-import Main from './components/Main';
-import Todo from './modules/Todo';
+import ToDoList from './components/ToDoList/ToDoList';
+import SideNav from './components/SideNav/SideNav';
+import NavBar from './components/NavBar/NavBar';
+import Main from './components/Main/Main';
+import ToDo from './modules/ToDo';
 
 class App extends React.Component{
 
@@ -16,7 +16,7 @@ class App extends React.Component{
     this.handleTodoUpdate = this.handleTodoUpdate.bind(this);
     this.handleNavSelect = this.handleNavSelect.bind(this);
     
-    this.state = {todos: [], todoToDisplayId: 0, newTodoName: ''};
+    this.state = {todos: this.props.todos, todoToDisplayId: 0, newTodoName: ''};
   }
 
   handleTodoNameChange(event){
@@ -30,7 +30,7 @@ class App extends React.Component{
       return; 
     }
 
-    const newTodo = new Todo(
+    const newTodo = new ToDo(
       this.state.todos.length,
       this.state.newTodoName
     );
@@ -57,11 +57,11 @@ class App extends React.Component{
 
     return (
       <>
-        <Navbar/>
+        <NavBar/>
 
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col">
 
               <SideNav todos={todos} onTodoSelect={this.handleNavSelect}>
                 <form onSubmit={this.handleNewTodoList}>
@@ -75,7 +75,7 @@ class App extends React.Component{
             <Main>
               {this.state.todos.length > 0 &&          
                 <div>              
-                  <TodoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>
+                  <ToDoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>
                 </div>}
             </Main>
 

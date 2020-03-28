@@ -6,6 +6,8 @@ import SideNav from './components/SideNav/SideNav';
 import NavBar from './components/NavBar/NavBar';
 import Main from './components/Main/Main';
 import ToDo from './modules/ToDo';
+import PropTypes from 'prop-types';
+
 
 class App extends React.Component{
 
@@ -85,5 +87,9 @@ class App extends React.Component{
     );
   }
 }
+
+App.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.instanceOf(ToDo)).isRequired
+};
 
 export default App;

@@ -1,4 +1,6 @@
 import React from 'react';
+import ToDo from '../../modules/ToDo';
+import PropTypes from 'prop-types';
 
 class SideNav extends React.Component{
     constructor(props){
@@ -8,7 +10,8 @@ class SideNav extends React.Component{
 
     handleTodoNavSelect(event){
         event.preventDefault();
-        this.props.onTodoSelect(event.target.id);
+        const id = Number(event.target.id,10);
+        this.props.onTodoSelect(id);
     }
 
     render(){
@@ -30,5 +33,10 @@ class SideNav extends React.Component{
         )
     };
 }
+
+SideNav.propTypes = {    
+    todos: PropTypes.arrayOf(PropTypes.instanceOf(ToDo)).isRequired
+};
+
 
 export default SideNav;

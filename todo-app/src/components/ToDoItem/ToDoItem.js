@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class ToDoItem extends React.Component{
     render () {
@@ -9,6 +10,11 @@ class ToDoItem extends React.Component{
             </div>
         )
     };
+}
+
+ToDoItem.propTypes = {
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired
 }
 
 export default ToDoItem;

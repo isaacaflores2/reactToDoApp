@@ -1,5 +1,7 @@
 import React from 'react';
 import ToDoItem from "../ToDoItem/ToDoItem";
+import ToDo from '../../modules/ToDo';
+import PropTypes from 'prop-types';
 
 class ToDoList extends React.Component{
 
@@ -52,5 +54,10 @@ class ToDoList extends React.Component{
         )
     }
 }
+
+ToDoList.propTypes = {
+    id: PropTypes.number.isRequired,
+    todo: PropTypes.instanceOf(ToDo).isRequired
+};
 
 export default ToDoList;

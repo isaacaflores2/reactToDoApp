@@ -15,7 +15,8 @@ class App extends React.Component{
     super(props);
     this.handleTodoNameChange = this.handleTodoNameChange.bind(this);
     this.handleNewTodoList = this.handleNewTodoList.bind(this);
-    this.handleTodoUpdate = this.handleTodoUpdate.bind(this);
+    this.handleTodoItemAdd = this.handleTodoItemAdd.bind(this);
+    this.handleTodoItemRemove = this.handleTodoItemRemove.bind(this);
     this.handleNavSelect = this.handleNavSelect.bind(this);
     
     this.state = {todos: this.props.todos, todoToDisplayId: 0, newTodoName: ''};
@@ -47,9 +48,15 @@ class App extends React.Component{
     this.setState({todoToDisplayId: todoListId })
   }
 
-  handleTodoUpdate(id, value){    
+  handleTodoItemAdd(todoListId, value){    
     const updatedTodos = this.state.todos;
-    updatedTodos[id].addItem(value);
+    updatedTodos[todoListId].addItem(value);
+    this.setState({todos: updatedTodos});
+  }
+
+  handleTodoItemRemove(todoListId, itemId){    
+    const updatedTodos = this.state.todos;
+    updatedTodos[todoListId].removeItem(itemId);
     this.setState({todos: updatedTodos});
   }
 
@@ -77,7 +84,7 @@ class App extends React.Component{
             <Main>
               {this.state.todos.length > 0 &&          
                 <div>              
-                  <ToDoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoUpdate}/>
+                  <ToDoList key={todoId} id={todoId} todo={todos[todoId]} onNewItem={this.handleTodoItemAdd} onRemoveItem={this.handleTodoItemRemove}/>
                 </div>}
             </Main>
 

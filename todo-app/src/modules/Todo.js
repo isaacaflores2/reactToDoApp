@@ -8,4 +8,8 @@ export default class ToDo{
     addItem(item){
         this.items.push(item);
     }
+
+    removeItem(id){
+        this.items.splice(id,1);
+    }
 }   

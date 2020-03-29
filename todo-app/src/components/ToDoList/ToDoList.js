@@ -9,6 +9,7 @@ class ToDoList extends React.Component{
         super(props);
         this.handleTextChange = this.handleTextChange.bind(this);        
         this.handleNewItem = this.handleNewItem.bind(this);
+        this.handleRemoveItem = this.handleRemoveItem.bind(this);
 
         this.state = {itemText: ''};
     }
@@ -33,15 +34,19 @@ class ToDoList extends React.Component{
         this.props.onNewItem(this.props.id, newItem);
     }
 
+    handleRemoveItem(itemId){
+        this.props.onRemoveItem(this.props.id, itemId);
+    }
+
     render(){
         return(           
-            <div>   
+            <div data-testid={"todolist-"+this.props.todo.name}>   
                 <header data-testid='todolist-header'>
                     <h1>{this.props.todo.name}</h1>
                 </header>
                 
                 {this.props.todo.items.map((item,i) => 
-                    <ToDoItem key={item} name={item} id={i}/>                
+                    <ToDoItem key={item} name={item} id={i} onRemoveItem={this.handleRemoveItem} />                
                 )}
 
                 <form data-testid='list-form' onSubmit={this.handleNewItem}>
@@ -57,7 +62,8 @@ class ToDoList extends React.Component{
 
 ToDoList.propTypes = {
     id: PropTypes.number.isRequired,
-    todo: PropTypes.instanceOf(ToDo).isRequired
+    todo: PropTypes.instanceOf(ToDo).isRequired,
+    onRemoveItem: PropTypes.func.isRequired
 };
 
 export default ToDoList;

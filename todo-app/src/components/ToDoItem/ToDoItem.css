@@ -1,0 +1,7 @@
+.item-complete{
+    text-decoration: line-through;
+}
+
+.item-not-complete{
+    font-weight: bold
+}

@@ -7,13 +7,17 @@ import * as serviceWorker from './serviceWorker';
 
 
 const todos = [
-    new ToDo(0, "Chores"),
-    new ToDo(1, "Work"),
+    new ToDo(0, "Work"),
+    new ToDo(1, "Chores"),
 ];
 todos[0].addItem("Code");
 todos[0].addItem("Attend meeting");
+todos[0].addItem("Watch tutorial");
+todos[0].addItem("Submit PR");
+todos[0].addItem("A really long task I need to complete today before I leave work");
 todos[1].addItem("Dishes");
 todos[1].addItem("Mow lawn");
+todos[1].addItem("Laundry");
 
 ReactDOM.render(<App todos={todos} />, document.getElementById('root'));
 

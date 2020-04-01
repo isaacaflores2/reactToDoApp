@@ -21,22 +21,13 @@ test('<App/> renders all components', () =>{
     const {getByTestId} = render(<App todos={todos}/>);
     
     expect(getByTestId('navbar')).toBeInTheDocument();
-    expect(getByTestId('sidenav')).toBeInTheDocument();
-    expect(getByTestId('main')).toBeInTheDocument();
-});
-
-test('<App/> renders sidenav with list names', () =>{
-    const {getByTestId} = render(<App todos={todos}/>);
-    const sidenav = getByTestId('sidenav');
-    
-    expect(sidenav).toHaveTextContent('List One');
-    expect(sidenav).toHaveTextContent('List Two');
-    expect(sidenav).toHaveTextContent('List Three');
+    expect(getByTestId('todolist-title').textContent).toBe('List One');
+    expect(getByTestId('todolist-List One')).toBeInTheDocument();
 });
 
 test('<App/> renders main with first todo list', () =>{
     const {getByTestId} = render(<App todos={todos}/>);
-    const todoListHeader = getByTestId('todolist-header');
+    const todoListHeader = getByTestId('todolist-title');
     
     expect(todoListHeader).toHaveTextContent('List One');
 });
@@ -44,15 +35,15 @@ test('<App/> renders main with first todo list', () =>{
 
 test('<App/> updates main with select to do', () =>{
     const {getByTestId, getByText} = render(<App todos={todos}/>);
-    const lastTodoListName = getByTestId('todo-name-list').lastChild.textContent;
+    const lastTodoListName = getByTestId('todo-name-dropdown').lastChild.textContent;
 
     fireEvent.click(getByText(lastTodoListName));
 
-    expect(getByTestId('todolist-header')).toHaveTextContent(lastTodoListName);
+    expect(getByTestId('todolist-title')).toHaveTextContent(lastTodoListName);
 });
 
 test('<App/> updates main when item is added', () =>{
-    const {getByTestId, getByText, debug, getByPlaceholderText} = render(<App todos={todos}/>);
+    const {getByTestId, getByText, getByPlaceholderText} = render(<App todos={todos}/>);
 
     fireEvent.change(getByPlaceholderText('New item'),{
         target: {value: 'test item'}
@@ -64,7 +55,7 @@ test('<App/> updates main when item is added', () =>{
 
 test('<App/> updates main when item is removed', () =>{
     todos[0].addItem('test item');
-    const {getByTestId, debug} = render(<App todos={todos}/>);
+    const {getByTestId} = render(<App todos={todos}/>);
     console.log("Remove icon:" + getByTestId('remove-icon'));
 
     fireEvent.click(getByTestId('remove-icon'));
@@ -72,4 +63,12 @@ test('<App/> updates main when item is removed', () =>{
     expect(getByTestId('todolist-List One')).not.toHaveTextContent('test item');
 });
 
+test('<App/> click remove icon', () =>{
+    const {getByTestId} = render(<App todos={todos}/>);
+    
+    fireEvent.click(getByTestId('list-remove-icon-0'));
+
+    expect(todos.length).toBe(2);
+    expect(getByTestId('todo-name-dropdown').children.length).toBe(2);
+});
 

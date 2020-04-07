@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import ToDoList from './components/ToDoList/ToDoList';
 import NavBar from './components/NavBar/NavBar';
 import ToDo from './modules/ToDo';
+import SideBar from './components/SideBar/SideBar';
+import FormWithIcon from './components/FormWithIcon/FormWithIcon';
 
 class App extends React.Component {
   constructor(props) {
@@ -15,8 +17,14 @@ class App extends React.Component {
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
     this.handleSelectList = this.handleSelectList.bind(this);
     this.handleRemoveList = this.handleRemoveList.bind(this);
+    this.handleToggleSideBar = this.handleToggleSideBar.bind(this);
 
-    this.state = { todos: this.props.todos, todoToDisplayId: 0, newTodoName: '' };
+    this.state = {
+      todos: this.props.todos,
+      todoToDisplayId: 0,
+      newTodoName: '',
+      sideBarIsCollapsed: true,
+    };
   }
 
   handleTodoNameChange(event) {
@@ -82,47 +90,73 @@ class App extends React.Component {
     });
   }
 
+  handleToggleSideBar() {
+    this.setState((state) => ({
+      sideBarIsCollapsed: !state.sideBarIsCollapsed,
+    }));
+  }
+
   render() {
-    const { todos } = this.state;
-    const todoId = this.state.todoToDisplayId;
+    const {
+      todos, todoToDisplayId, newTodoName, sideBarIsCollapsed,
+    } = this.state;
 
     return (
       <>
-        <div className="container">
+        <div className="container-fluid px-0">
 
           <header>
-            <NavBar
-              todos={todos}
-              onTodoSelect={this.handleSelectList}
-              onNewList={this.handleNewList}
-              onTodoNameChange={this.handleTodoNameChange}
-              onRemoveList={this.handleRemoveList}
-              newTodoName={this.state.newTodoName}
-            />
+            <NavBar />
           </header>
 
-          <div data-testid="todolist-title" className="jumbotron">
-            {this.state.todos.length > 0
-              && (
-              <div className="col-md-6">
-                <h1 className="display-3 font-italic">{todos[todoId].name}</h1>
-              </div>
-              )}
-          </div>
+          <div className="row no-gutters">
+            <div className="col-auto px-0">
+              <SideBar
+                todos={todos}
+                onTodoSelect={this.handleSelectList}
+                onNewList={this.handleNewList}
+                onRemoveList={this.handleRemoveList}
+                isCollapsed={sideBarIsCollapsed}
+                onToggle={this.handleToggleSideBar}
+              >
+                {/* <form className="" onSubmit={this.handleNewList}>
+                  <input className="form-control mr-sm-2 bg-transparent text-light" placeholder="My new ToDo list" id="newTodoList" onChange={this.handleTodoNameChange} value={newTodoName} />
+                </form> */}
+                <FormWithIcon
+                  text={newTodoName}
+                  inputClassName="text-light"
+                  onSubmit={this.handleNewList}
+                  onChange={this.handleTodoNameChange}
+                  isCollapsed={sideBarIsCollapsed}
+                  placeholder="Add New List"
+                />
+              </SideBar>
+            </div>
 
-          <main>
-            {this.state.todos.length > 0
+            <div className="col overflow-hidden">
+              <div data-testid="todolist-title" className="jumbotron px-0 mb-0  ">
+                {todos.length > 0
+                && (
+                <div className="col">
+                  <h1 className="display-3 font-italic">{todos[todoToDisplayId].name}</h1>
+                </div>
+                )}
+              </div>
+
+              <main>
+                {todos.length > 0
               && (
               <ToDoList
-                key={todoId}
-                id={todoId}
-                todo={todos[todoId]}
+                key={todoToDisplayId}
+                id={todoToDisplayId}
+                todo={todos[todoToDisplayId]}
                 onNewItem={this.handleAddItem}
                 onRemoveItem={this.handleRemoveItem}
               />
               )}
-          </main>
-
+              </main>
+            </div>
+          </div>
         </div>
       </>
     );

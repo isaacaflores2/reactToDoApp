@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BsXSquareFill } from 'react-icons/bs';
+import ListIcon from '@material-ui/icons/List';
 
 class ListNavItem extends React.Component {
   constructor(props) {
@@ -19,13 +19,16 @@ class ListNavItem extends React.Component {
   }
 
   render() {
+    const { id, name, isCollapsed } = this.props;
+    const display = isCollapsed ? 'd-none' : '';
+
     return (
-      <div className="row px-1">
-        <div className="col-8 mr-auto text-truncate" id={this.props.id} onClick={this.handleSelect}>
-          {this.props.name}
+      <div data-testid={`list-navitem-name-${id}`} className="row flex-nowrap align-items-center">
+        <div className="col-2">
+          <ListIcon data-testid={`list-nav-icon-${id}`} id={id} />
         </div>
-        <div className="col-3 pl-1">
-          <BsXSquareFill data-testid={`list-remove-icon-${this.props.id}`} id={this.props.id} onClick={this.handleRemove} />
+        <div data-testid={`list-navitem-name-text-${id}`} className={`${display} col-10 text-truncate`} id={id} onClick={this.handleSelect}>
+          {name}
         </div>
       </div>
     );
@@ -37,6 +40,11 @@ ListNavItem.propTypes = {
   name: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
   onRemoveList: PropTypes.func.isRequired,
+  isCollapsed: PropTypes.bool,
+};
+
+ListNavItem.defaultProps = {
+  isCollapsed: false,
 };
 
 export default ListNavItem;

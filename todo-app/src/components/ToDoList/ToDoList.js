@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ToDoItem from '../ToDoItem/ToDoItem';
 import ToDo from '../../modules/ToDo';
+import FormWithIcon from '../FormWithIcon/FormWithIcon';
+import ListCard from '../ListCard/ListCard';
+
 
 class ToDoList extends React.Component {
   constructor(props) {
@@ -38,32 +41,27 @@ class ToDoList extends React.Component {
   }
 
   render() {
+    const { itemText } = this.state;
+    const { todo } = this.props;
     return (
-      <div data-testid={`todolist-${this.props.todo.name}`} className="row">
+      <div data-testid={`todolist-${todo.name}`} className="row">
 
-        {this.props.todo.items.map((item, i) => (
-          <div key={`${item}-${i}`} className="col-12 col-sm-4 mb-3">
-            <div className="card card-body h-100">
-              <ToDoItem key={`${item}-${i}`} name={item} id={i} onRemoveItem={this.handleRemoveItem} />
-            </div>
-          </div>
+        {todo.items.map((item, i) => (
+          <ListCard key={`${item}-${i}`}>
+            <ToDoItem name={item} id={i} onRemoveItem={this.handleRemoveItem} />
+          </ListCard>
         ),
         )}
 
-        <div className="col-12 col-sm-4 mb-3">
-          <div className="card card-body h-100">
-            <form data-testid="list-form" onSubmit={this.handleNewItem}>
-              <div className="form-row no-gutters py-0">
-                <div className="col-10 col-sm-8 mr-auto">
-                  <input className="form-control-sm bg-transparent" placeholder="New item" id="newItem" onChange={(this.handleTextChange)} value={this.state.itemText} />
-                </div>
-                <div className="">
-                  <button data-testid="new-item-button" type="submit" className="btn btn-sm btn-dark">Add</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+        <ListCard>
+          <FormWithIcon
+            data-testid="list-form"
+            text={itemText}
+            onSubmit={this.handleNewItem}
+            onChange={this.handleTextChange}
+            placeholder="Add New Item"
+          />
+        </ListCard>
       </div>
     );
   }

@@ -1,0 +1,16 @@
+.sidebar-container {
+    min-height: 100vh;       
+}
+
+.sidebar-open {
+    max-width: 150px;
+}
+
+.sidebar-collapsed {
+    width: 30px;
+}
+
+#sidebar-container .list-group a {
+    height: 50px;
+    color: white;
+}

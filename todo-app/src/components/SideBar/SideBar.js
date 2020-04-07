@@ -29,10 +29,10 @@ class SideBar extends Component {
 
   render() {
     const { todos, children, isCollapsed } = this.props;
-    const sidebarClass = isCollapsed ? 'sidebar-collapsed' : 'sidebar-open';
+    const sidebarClass = isCollapsed ? 'sidebar-collapsed px-2' : 'sidebar-open';
 
     return (
-      <div data-testid="sidebar-container" className={`${sidebarClass} sidebar-container sticky-top bg-dark text-light d-non d-mb-block`}>
+      <div data-testid="sidebar-container" className={`${sidebarClass} sidebar-container sticky-top bg-dark text-light d-mb-block`}>
         <MenuOpenIcon data-testid="sidebar-menu-button" onClick={this.handleToggleSideBar} />
         <ul data-testid="sidebar-todoname-list" className="nav flex-column list-group">
           { todos.map((todo) => (

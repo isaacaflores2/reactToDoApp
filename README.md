@@ -5,8 +5,9 @@ A Simple to do list using React! The web app allows you to add your own todo lis
 # Motivation
 I decided to create this project so I could quickly learn React basics. 
 
-# Screenshot
+# Screenshots
 ![](imgs/todo-app-screenshot.png)
+![](imgs/todo-app-mobile-screenshot.png)
 
 # Technologies
 1. [React](https://reactjs.org/)

@@ -6,9 +6,14 @@ using System.Linq;
 
 namespace TodoApi.Services
 {
-    public class ListService
+    public class ListService : IListService
     {
         private readonly IMongoCollection<ToDoList> lists;
+
+        public ListService()
+        {
+            lists = null;
+        }
 
         public ListService(IToDoDatabaseSettings settings)
         {

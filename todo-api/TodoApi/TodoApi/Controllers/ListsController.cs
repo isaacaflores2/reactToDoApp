@@ -9,9 +9,9 @@ namespace TodoApi.Controllers
     [ApiController]
     public class ListsController : ControllerBase
     {
-        private readonly ListService listService;
+        private readonly IListService listService;
 
-        public ListsController(ListService listService)
+        public ListsController(IListService listService)
         {
             this.listService = listService;
         }

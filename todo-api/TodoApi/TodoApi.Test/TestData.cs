@@ -12,13 +12,32 @@ namespace TodoApi.Test
             var lists = new List<ToDoList>
             {
                 new ToDoList{Id="1",Name="Chores", Items=new List<Item> {
-                    new Item{Id=0, Name="Laundry", isChecked=false},
-                    new Item{Id=1, Name="Dishes", isChecked=true},
+                    new Item{Id=0, Name="Laundry", IsChecked=false},
+                    new Item{Id=1, Name="Dishes", IsChecked=true},
                     } 
                 },
                 new ToDoList{Id="2",Name="Work", Items=new List<Item> {
-                    new Item{Id=0, Name="Code", isChecked=false},
-                    new Item{Id=1, Name="Submit PR", isChecked=true},
+                    new Item{Id=0, Name="Code", IsChecked=false},
+                    new Item{Id=1, Name="Submit PR", IsChecked=true},
+                    }
+                },
+            };
+
+            return lists;
+        }
+
+        public static List<ToDoList> MongoData()
+        {
+            var lists = new List<ToDoList>
+            {
+                new ToDoList{Id="1",Name="Chores", Items=new List<Item> {
+                    new Item{Id=0, Name="Laundry", IsChecked=false},
+                    new Item{Id=1, Name="Dishes", IsChecked=true},
+                    }
+                },
+                new ToDoList{Id="2",Name="Work", Items=new List<Item> {
+                    new Item{Id=0, Name="Code", IsChecked=false},
+                    new Item{Id=1, Name="Submit PR", IsChecked=true},
                     }
                 },
             };

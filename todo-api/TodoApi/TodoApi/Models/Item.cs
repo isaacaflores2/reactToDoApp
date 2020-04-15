@@ -10,6 +10,6 @@ namespace TodoApi.Models
 
         public string Name { get; set; }
 
-        public bool isChecked { get; set; }
+        public bool IsChecked { get; set; }
     }
 }

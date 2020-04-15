@@ -33,7 +33,7 @@ namespace TodoApi
             services.AddSingleton<IToDoDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions< ToDoDatabaseSettings>>().Value);
 
-            services.AddSingleton<ListService>();
+            services.AddSingleton<IListService, ListService>();         
             
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.UseMemberCasing());

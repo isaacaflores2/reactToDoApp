@@ -30,12 +30,12 @@ namespace TodoApi.Test
             {
                 Id = "3",
                 Name = "Hobby",
-                Items = new List<Item> { new Item { Id = 0, Name = "Buy parts", isChecked = false } }
+                Items = new List<Item> { new Item { Id = 0, Name = "Buy parts", IsChecked = false } }
             };
-            listService.Create(Arg.Any<ToDoList>()).Returns(newList);
-            //listService.Update(Arg.Any<string>(), Arg.Any<ToDoList>()).Returns();
-            //listService.Remove(Arg.Any<ToDoList>()).Returns();
-            //listService.Remove(Arg.Any<string>()).Returns();  
+            //listService.When(x => x.Create(default)).DoNotCallBase();
+            //listService.Update(Arg.Any<string>(), Arg.Any<ToDoList>()).ReturnsNull();
+            //listService.Remove(Arg.Any<ToDoList>()).ReturnsNull();
+            //listService.Remove(Arg.Any<string>()).ReturnsNull();  
         }
 
         [TestMethod]
@@ -48,6 +48,7 @@ namespace TodoApi.Test
             var result = controller.Get();
 
             //Assert
+            Assert.IsInstanceOfType(result.Value, typeof(List<ToDoList>));
             Assert.AreEqual(result.Value.Count, 2);
         }
         
@@ -61,6 +62,7 @@ namespace TodoApi.Test
             var result = controller.Get("1");
 
             //Assert
+            Assert.IsInstanceOfType(result.Value, typeof(ToDoList));
             Assert.AreEqual(result.Value.Id, data[0].Id);
             Assert.AreEqual(result.Value.Name, data[0].Name);
             Assert.AreEqual(result.Value.Items.Count, data[0].Items.Count);
@@ -77,6 +79,7 @@ namespace TodoApi.Test
             var value = result.Value as ToDoList;
 
             //Assert
+            Assert.IsInstanceOfType(result, typeof(CreatedAtRouteResult));
             Assert.AreEqual(result.StatusCode, 201);
             listService.Received(1).Create(newList);
             Assert.AreEqual(value.Id, newList.Id);
@@ -94,8 +97,8 @@ namespace TodoApi.Test
                 Id = "1",
                 Name = "Chores",
                 Items = new List<Item> {
-                    new Item{Id=0, Name="Laundry", isChecked=true},
-                    new Item{Id=1, Name="Dishes", isChecked=true},
+                    new Item{Id=0, Name="Laundry", IsChecked=true},
+                    new Item{Id=1, Name="Dishes", IsChecked=true},
                     }
             };
 
@@ -103,6 +106,7 @@ namespace TodoApi.Test
             var result = controller.Update("1", updatedList) as NoContentResult;            
 
             //Assert
+            Assert.IsInstanceOfType(result, typeof(NoContentResult));
             listService.Received(1).Update("1", updatedList);            
         }
 
@@ -116,8 +120,8 @@ namespace TodoApi.Test
                 Id = "3",
                 Name = "Test Code",
                 Items = new List<Item> {
-                    new Item{Id=0, Name="Arrange", isChecked=true},
-                    new Item{Id=1, Name="Act", isChecked=true},
+                    new Item{Id=0, Name="Arrange", IsChecked=true},
+                    new Item{Id=1, Name="Act", IsChecked=true},
                     }
             };
 
@@ -125,6 +129,7 @@ namespace TodoApi.Test
             var result = controller.Update("3", updatedList) as NotFoundResult;
 
             //Assert
+            Assert.IsInstanceOfType(result, typeof(NotFoundResult));
             Assert.AreEqual(result.StatusCode, 404);
             listService.DidNotReceive().Update("3", updatedList);
         }
@@ -139,6 +144,7 @@ namespace TodoApi.Test
             var result = controller.Delete("1") as NoContentResult;
 
             //Assert
+            Assert.IsInstanceOfType(result, typeof(NoContentResult));
             listService.Received(1).Remove("1");
         }
 
@@ -152,6 +158,7 @@ namespace TodoApi.Test
             var result = controller.Delete("3") as NotFoundResult;
 
             //Assert
+            Assert.IsInstanceOfType(result, typeof(NotFoundResult));
             listService.DidNotReceive().Remove("3");
         }
     }

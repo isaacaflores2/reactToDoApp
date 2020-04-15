@@ -16,10 +16,12 @@ namespace TodoApi.Controllers
             this.listService = listService;
         }
 
+        // GET: api/v1/lists/
         [HttpGet]
         public ActionResult<List<ToDoList>> Get() =>
             listService.Get();
 
+        // GET: api/v1/lists/{object-id}
         [HttpGet("{id:length(24)}", Name = "GetList")]
         public ActionResult<ToDoList> Get(string id)
         {
@@ -33,14 +35,16 @@ namespace TodoApi.Controllers
             return list;
         }
 
+        // POST: api/v1/lists
         [HttpPost]
         public ActionResult<ToDoList> Create(ToDoList list)
         {
             listService.Create(list);
 
-            return CreatedAtRoute("GetBook", new {id=list.Id.ToString()}, list);
+            return CreatedAtRoute("GetList", new {id=list.Id.ToString()}, list);
         }
 
+        // PUT: api/v1/lists
         [HttpPut("{id:length(24)}")]
         public IActionResult Update(string id, ToDoList updatedList)
         {
@@ -56,6 +60,7 @@ namespace TodoApi.Controllers
             return NoContent();
         }
 
+        // PUT: api/v1/lists
         [HttpPut("{id:length(24)}")]
         public IActionResult Delete(string id)
         {

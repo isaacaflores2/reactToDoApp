@@ -14,8 +14,7 @@ class SideBar extends Component {
     this.state = { isCollapsed: true };
   }
 
-  handleSelectList(event) {
-    const id = Number(event.target.id, 10);
+  handleSelectList(id) {
     this.props.onTodoSelect(id);
   }
 

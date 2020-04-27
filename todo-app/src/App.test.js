@@ -3,24 +3,34 @@ import {
   render, cleanup, fireEvent,
 } from '@testing-library/react';
 import App from './App';
-import ToDo from './modules/ToDo';
+import API from './services/ToDoService';
 import '@testing-library/jest-dom/extend-expect';
 
-let todos = [];
+const expectedTodoJson = [{
+  id: '0',
+  name: 'List One',
+  items: [{ id: 0, name: 'Item1', isChecked: false }, { id: 0, name: 'Item2', isChecked: true }],
+}, {
+  id: '1',
+  name: 'List Two',
+  items: [],
+}, {
+  id: '2',
+  name: 'List Three',
+  items: [],
+}];
 
-beforeEach(() => {
-  todos = [
-    new ToDo(0, 'List One'),
-    new ToDo(1, 'List Two'),
-    new ToDo(2, 'List Three'),
-  ];
+API.getTodos = jest.fn();
+API.getTodos.mockReturnValue(expectedTodoJson);
+
+afterEach(() => {
+  cleanup;
+  API.getTodos.mockClear();
 });
-
-afterEach(cleanup);
 
 
 test('<App/> renders all components', () => {
-  const { getByTestId } = render(<App todos={todos} />);
+  const { getByTestId } = render(<App />);
 
   expect(getByTestId('navbar')).toBeInTheDocument();
   expect(getByTestId('todolist-title').textContent).toBe('List One');
@@ -28,7 +38,7 @@ test('<App/> renders all components', () => {
 });
 
 test('<App/> renders main with first todo list', () => {
-  const { getByTestId } = render(<App todos={todos} />);
+  const { getByTestId } = render(<App />);
   const todoListHeader = getByTestId('todolist-title');
 
   expect(todoListHeader).toHaveTextContent('List One');
@@ -36,16 +46,16 @@ test('<App/> renders main with first todo list', () => {
 
 
 test('<App/> updates main with select to do', () => {
-  const { getByTestId, getByText } = render(<App todos={todos} />);
+  const { getByTestId } = render(<App />);
   const lastListNavItem = getByTestId('list-navitem-name-2');
 
-  fireEvent.click(getByText(lastListNavItem.textContent));
+  fireEvent.click(lastListNavItem);
 
   expect(getByTestId('todolist-title')).toHaveTextContent(lastListNavItem.textContent);
 });
 
 test('<App/> updates main when item is added', () => {
-  const { getByTestId, getByText, getByPlaceholderText } = render(<App todos={todos} />);
+  const { getByTestId, getByPlaceholderText } = render(<App />);
 
   fireEvent.change(getByPlaceholderText('Add New Item'), {
     target: { value: 'test item' },
@@ -75,7 +85,7 @@ test('<App/> updates main when item is added', () => {
 // });
 
 test('<App/> add new list', () => {
-  const { getByTestId, getByPlaceholderText } = render(<App todos={todos} />);
+  const { getByTestId, getByPlaceholderText } = render(<App />);
 
   fireEvent.change(getByPlaceholderText('Add New List'), {
     target: { value: 'List Four' },
@@ -83,4 +93,9 @@ test('<App/> add new list', () => {
   fireEvent.submit(getByPlaceholderText('Add New List'));
 
   expect(getByTestId('todolist-title')).toHaveTextContent('List Four');
+});
+
+test('<App/> fetch data', () => {
+  const { getByTestId, getByPlaceholderText, getTodos } = render(<App />);
+  expect(API.getTodos).toHaveBeenCalledTimes(1);
 });

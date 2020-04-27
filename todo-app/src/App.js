@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import React from 'react';
 import './App.css';
 import './scss/custom.scss';
@@ -5,8 +6,10 @@ import PropTypes from 'prop-types';
 import ToDoList from './components/ToDoList/ToDoList';
 import NavBar from './components/NavBar/NavBar';
 import ToDo from './modules/ToDo';
+import API from './services/ToDoService';
 import SideBar from './components/SideBar/SideBar';
 import FormWithIcon from './components/FormWithIcon/FormWithIcon';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -20,11 +23,26 @@ class App extends React.Component {
     this.handleToggleSideBar = this.handleToggleSideBar.bind(this);
 
     this.state = {
-      todos: this.props.todos,
+      todos: [],
       todoToDisplayId: 0,
       newTodoName: '',
       sideBarIsCollapsed: true,
     };
+  }
+
+  componentDidMount() {
+    const jsonTodos = API.getTodos();
+    const todos = this.createToDoObjectsFromJson(jsonTodos);
+    this.setState({ todos });
+  }
+
+
+  createToDoObjectsFromJson(json) {
+    const todos = [];
+    for (let i = 0; i < json.length; i += 1) {
+      todos.push(ToDo.fromJson(json[i]));
+    }
+    return todos;
   }
 
   handleTodoNameChange(event) {
@@ -119,9 +137,6 @@ class App extends React.Component {
                 isCollapsed={sideBarIsCollapsed}
                 onToggle={this.handleToggleSideBar}
               >
-                {/* <form className="" onSubmit={this.handleNewList}>
-                  <input className="form-control mr-sm-2 bg-transparent text-light" placeholder="My new ToDo list" id="newTodoList" onChange={this.handleTodoNameChange} value={newTodoName} />
-                </form> */}
                 <FormWithIcon
                   text={newTodoName}
                   inputClassName="text-light"
@@ -162,9 +177,5 @@ class App extends React.Component {
     );
   }
 }
-
-App.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.instanceOf(ToDo)).isRequired,
-};
 
 export default App;

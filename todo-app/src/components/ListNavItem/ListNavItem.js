@@ -9,9 +9,8 @@ class ListNavItem extends React.Component {
     this.handleRemove = this.handleRemove.bind(this);
   }
 
-  handleSelect(event) {
-    event.preventDefault();
-    this.props.onSelect(event);
+  handleSelect() {
+    this.props.onSelect(this.props.id);
   }
 
   handleRemove() {
@@ -23,11 +22,11 @@ class ListNavItem extends React.Component {
     const display = isCollapsed ? 'd-none' : '';
 
     return (
-      <div data-testid={`list-navitem-name-${id}`} className="row flex-nowrap align-items-center">
+      <div data-testid={`list-navitem-name-${id}`} className="row flex-nowrap align-items-center" onClick={this.handleSelect}>
         <div className="col-2">
           <ListIcon data-testid={`list-nav-icon-${id}`} id={id} />
         </div>
-        <div data-testid={`list-navitem-name-text-${id}`} className={`${display} col-10 text-truncate`} id={id} onClick={this.handleSelect}>
+        <div data-testid={`list-navitem-name-text-${id}`} className={`${display} col-10 text-truncate`} id={id}>
           {name}
         </div>
       </div>
@@ -36,7 +35,7 @@ class ListNavItem extends React.Component {
 }
 
 ListNavItem.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
   onRemoveList: PropTypes.func.isRequired,

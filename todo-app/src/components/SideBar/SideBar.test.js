@@ -5,9 +5,9 @@ import ToDo from '../../modules/ToDo';
 import '@testing-library/jest-dom/extend-expect';
 
 const todos = [
-  new ToDo(0, 'List One'),
-  new ToDo(1, 'List Two'),
-  new ToDo(2, 'List Three'),
+  new ToDo('0', 'List One'),
+  new ToDo('1', 'List Two'),
+  new ToDo('2', 'List Three'),
 ];
 
 const onNewList = jest.fn();
@@ -52,6 +52,23 @@ test('<SideBar/> collapse', () => {
   expect(onToggle).toHaveBeenCalledTimes(1);
   expect(sidebarTodonameList.children.length).toBe(3);
   expect(getByTestId('list-navitem-name-text-0').classList).toContain('d-none');
+});
+
+test('<SideBar/> select todo name', () => {
+  const { getByTestId } = render(
+    <SideBar
+      todos={todos}
+      onTodoSelect={onTodoSelect}
+      onNewList={onNewList}
+      onRemoveList={onRemoveList}
+      isCollapsed
+      onToggle={onToggle}
+    />);
+  const sidebarTodonameList = getByTestId('list-navitem-name-1');
+
+  fireEvent.click(sidebarTodonameList);
+
+  expect(onTodoSelect).toHaveBeenCalledTimes(1);
 });
 
 // test('<SideBar/> click remove icon', () => {

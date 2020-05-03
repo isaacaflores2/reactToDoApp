@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './ToDoItem.css';
 import Checkbox from '@material-ui/core/Checkbox';
+import Item from '../../modules/Item';
 
 class ToDoItem extends React.Component {
   constructor(props) {
@@ -16,12 +17,12 @@ class ToDoItem extends React.Component {
   }
 
   handleRemoveItem() {
-    this.props.onRemoveItem(this.props.id);
+    this.props.onRemoveItem(this.props.item.id);
   }
 
   render() {
     const { isChecked } = this.state;
-    const { id, name } = this.props;
+    const { item } = this.props;
     const itemClass = isChecked ? 'item-complete' : '';
 
     return (
@@ -29,18 +30,18 @@ class ToDoItem extends React.Component {
         <div className="col-1">
           <Checkbox
             className="px-0"
-            data-testid={`checkbox-${id}`}
-            id={`${id}`}
-            value={name}
-            checked={isChecked}
+            data-testid={`checkbox-${item.id}`}
+            id={`${item.id}`}
+            value={item.name}
+            checked={item.ischecked}
             size="small"
             color="primary"
             onChange={this.handleChange}
-            inputProps={{ 'aria-label': 'primary checkbox', 'data-testid': `clickable-checkbox-${id}` }}
+            inputProps={{ 'aria-label': 'primary checkbox', 'data-testid': `clickable-checkbox-${item.id}` }}
           />
         </div>
         <div data-testid="item-name" className={`col-10 text-truncate ${itemClass}`}>
-          {name}
+          {`${item.name}`}
         </div>
       </div>
     );
@@ -48,8 +49,7 @@ class ToDoItem extends React.Component {
 }
 
 ToDoItem.propTypes = {
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
+  item: PropTypes.instanceOf(Item).isRequired,
   onRemoveItem: PropTypes.func.isRequired,
 };
 

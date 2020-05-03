@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  render, cleanup, fireEvent,
+  render, cleanup, fireEvent, wait,
 } from '@testing-library/react';
 import App from './App';
 import API from './services/ToDoService';
@@ -21,7 +21,7 @@ const expectedTodoJson = [{
 }];
 
 API.getTodos = jest.fn();
-API.getTodos.mockReturnValue(expectedTodoJson);
+API.getTodos.mockResolvedValue(expectedTodoJson);
 
 afterEach(() => {
   cleanup;
@@ -29,34 +29,38 @@ afterEach(() => {
 });
 
 
-test('<App/> renders all components', () => {
+test('<App/> renders all components', async () => {
   const { getByTestId } = render(<App />);
 
+  await wait(() => expect(API.getTodos).toHaveBeenCalledTimes(1));
   expect(getByTestId('navbar')).toBeInTheDocument();
   expect(getByTestId('todolist-title').textContent).toBe('List One');
   expect(getByTestId('todolist-List One')).toBeInTheDocument();
 });
 
-test('<App/> renders main with first todo list', () => {
+test('<App/> renders main with first todo list', async () => {
   const { getByTestId } = render(<App />);
   const todoListHeader = getByTestId('todolist-title');
 
+  await wait(() => expect(API.getTodos).toHaveBeenCalledTimes(1));
   expect(todoListHeader).toHaveTextContent('List One');
 });
 
 
-test('<App/> updates main with select to do', () => {
+test('<App/> updates main with select to do', async () => {
   const { getByTestId } = render(<App />);
-  const lastListNavItem = getByTestId('list-navitem-name-2');
 
+  await wait(() => expect(API.getTodos).toHaveBeenCalledTimes(1));
+  const lastListNavItem = getByTestId('list-navitem-name-2');
   fireEvent.click(lastListNavItem);
 
   expect(getByTestId('todolist-title')).toHaveTextContent(lastListNavItem.textContent);
 });
 
-test('<App/> updates main when item is added', () => {
+test('<App/> updates main when item is added', async () => {
   const { getByTestId, getByPlaceholderText } = render(<App />);
 
+  await wait(() => expect(API.getTodos).toHaveBeenCalledTimes(1));
   fireEvent.change(getByPlaceholderText('Add New Item'), {
     target: { value: 'test item' },
   });
@@ -84,9 +88,10 @@ test('<App/> updates main when item is added', () => {
 //   expect(getByTestId('sidebar-todoname-list').children.length).toBe(2);
 // });
 
-test('<App/> add new list', () => {
+test('<App/> add new list', async () => {
   const { getByTestId, getByPlaceholderText } = render(<App />);
 
+  await wait(() => expect(API.getTodos).toHaveBeenCalledTimes(1));
   fireEvent.change(getByPlaceholderText('Add New List'), {
     target: { value: 'List Four' },
   });
@@ -95,7 +100,9 @@ test('<App/> add new list', () => {
   expect(getByTestId('todolist-title')).toHaveTextContent('List Four');
 });
 
-test('<App/> fetch data', () => {
+test('<App/> fetch data', async () => {
   const { getByTestId, getByPlaceholderText, getTodos } = render(<App />);
-  expect(API.getTodos).toHaveBeenCalledTimes(1);
+
+  await wait(() => expect(API.getTodos).toHaveBeenCalledTimes(1));
+  // expect(API.getTodos).toHaveBeenCalledTimes(1);
 });

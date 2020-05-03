@@ -27,13 +27,13 @@ class ToDoList extends React.Component {
       return;
     }
 
-    const newItem = this.state.itemText;
+    const newItemName = this.state.itemText;
 
     this.setState((state) => ({
       itemText: '',
     }));
 
-    this.props.onNewItem(this.props.id, newItem);
+    this.props.onNewItem(this.props.id, newItemName);
   }
 
   handleRemoveItem(itemId) {
@@ -46,9 +46,9 @@ class ToDoList extends React.Component {
     return (
       <div data-testid={`todolist-${todo.name}`} className="row">
 
-        {todo.items.map((item, i) => (
-          <ListCard key={`${item}-${i}`}>
-            <ToDoItem name={item} id={i} onRemoveItem={this.handleRemoveItem} />
+        {todo.items.map((item) => (
+          <ListCard key={`${item.name}-${item.id}`}>
+            <ToDoItem item={item} onRemoveItem={this.handleRemoveItem} />
           </ListCard>
         ),
         )}
@@ -68,7 +68,7 @@ class ToDoList extends React.Component {
 }
 
 ToDoList.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   todo: PropTypes.instanceOf(ToDo).isRequired,
   onRemoveItem: PropTypes.func.isRequired,
 };

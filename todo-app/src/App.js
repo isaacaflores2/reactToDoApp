@@ -1,8 +1,6 @@
-/* eslint-disable class-methods-use-this */
 import React from 'react';
 import './App.css';
 import './scss/custom.scss';
-import PropTypes from 'prop-types';
 import ToDoList from './components/ToDoList/ToDoList';
 import NavBar from './components/NavBar/NavBar';
 import ToDo from './modules/ToDo';
@@ -24,14 +22,14 @@ class App extends React.Component {
 
     this.state = {
       todos: [],
-      todoToDisplayId: 0,
+      todoToDisplayIndex: 0,
       newTodoName: '',
       sideBarIsCollapsed: true,
     };
   }
 
-  componentDidMount() {
-    const jsonTodos = API.getTodos();
+  async componentDidMount() {
+    const jsonTodos = await API.getTodos();
     const todos = this.createToDoObjectsFromJson(jsonTodos);
     this.setState({ todos });
   }
@@ -57,7 +55,7 @@ class App extends React.Component {
     }
 
     this.setState((state) => {
-      const newId = state.todos.length;
+      const newId = state.todos.length.toString();
       const newTodo = new ToDo(
         newId,
         state.newTodoName,
@@ -66,14 +64,14 @@ class App extends React.Component {
       return {
         todos: [newTodo].concat(state.todos),
         newTodoName: '',
-        todoToDisplayId: 0,
+        todoToDisplayIndex: 0,
       };
     });
   }
 
   handleSelectList(listId) {
     const index = this.state.todos.findIndex((todo) => todo.id === listId);
-    this.setState({ todoToDisplayId: index });
+    this.setState({ todoToDisplayIndex: index });
   }
 
   handleRemoveList(listId) {
@@ -89,10 +87,11 @@ class App extends React.Component {
     });
   }
 
-  handleAddItem(todoListId, value) {
+  handleAddItem(listId, value) {
     this.setState((state) => {
+      const listIndex = state.todos.findIndex((todo) => todo.id === listId);
       const updatedTodos = state.todos;
-      updatedTodos[todoListId].addItem(value);
+      updatedTodos[listIndex].addItem(value);
 
       return {
         todos: updatedTodos,
@@ -116,9 +115,9 @@ class App extends React.Component {
 
   render() {
     const {
-      todos, todoToDisplayId, newTodoName, sideBarIsCollapsed,
+      todos, todoToDisplayIndex, newTodoName, sideBarIsCollapsed,
     } = this.state;
-
+    const todo = todos[todoToDisplayIndex];
     return (
       <>
         <div className="container-fluid px-0">
@@ -153,7 +152,7 @@ class App extends React.Component {
                 {todos.length > 0
                 && (
                 <div className="col">
-                  <h1 className="display-3 font-italic">{todos[todoToDisplayId].name}</h1>
+                  <h1 className="display-3 font-italic">{todo.name}</h1>
                 </div>
                 )}
               </div>
@@ -162,9 +161,9 @@ class App extends React.Component {
                 {todos.length > 0
               && (
               <ToDoList
-                key={todoToDisplayId}
-                id={todoToDisplayId}
-                todo={todos[todoToDisplayId]}
+                key={todoToDisplayIndex}
+                id={todo.id}
+                todo={todo}
                 onNewItem={this.handleAddItem}
                 onRemoveItem={this.handleRemoveItem}
               />

@@ -1,3 +1,5 @@
+import Item from './Item';
+
 export default class ToDo {
   constructor(id, name) {
     this.id = id;
@@ -5,19 +7,22 @@ export default class ToDo {
     this.items = [];
   }
 
-  addItem(item) {
+  addItem(name) {
+    const id = this.items.length;
+    const item = new Item(id, name);
     this.items.push(item);
   }
 
   removeItem(id) {
-    this.items.splice(id, 1);
+    const index = this.items.findIndex((item) => item.id === id);
+    this.items.splice(index, 1);
   }
 
   static fromJson(json) {
     const todo = new ToDo(json.id, json.name);
     for (let i = 0; i < json.items.length; i += 1) {
-      const item = json.items[i];
-      todo.addItem(item.name);
+      const item = Item.fromJson(json.items[i]);
+      todo.items.push(item);
     }
     return todo;
   }

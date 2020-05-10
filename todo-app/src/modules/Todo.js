@@ -26,4 +26,12 @@ export default class ToDo {
     }
     return todo;
   }
+
+  static createToDoArrayFromJson(json) {
+    const todos = [];
+    for (let i = 0; i < json.length; i += 1) {
+      todos.push(ToDo.fromJson(json[i]));
+    }
+    return todos;
+  }
 }

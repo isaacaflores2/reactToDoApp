@@ -9,12 +9,20 @@ exampleToDo.addItem('Test Code');
 
 const onNewItem = jest.fn();
 const onRemoveItem = jest.fn();
+const onListUpdate = jest.fn();
 
 afterEach(cleanup);
 
 test('<ToDoList/>', () => {
   const { getByText, getByPlaceholderText } = render(
-    <ToDoList key={1} id="1" todo={exampleToDo} onNewItem={onNewItem} onRemoveItem={onRemoveItem} />,
+    <ToDoList
+      key={1}
+      id="1"
+      todo={exampleToDo}
+      onNewItem={onNewItem}
+      onRemoveItem={onRemoveItem}
+      onListUpdate={onListUpdate}
+    />,
   );
 
   expect(getByText('Test Code')).toBeInTheDocument();
@@ -24,7 +32,14 @@ test('<ToDoList/>', () => {
 
 test('<ToDoList/> item added', () => {
   const { getByPlaceholderText, getByTestId } = render(
-    <ToDoList key={1} id="1" todo={exampleToDo} onNewItem={onNewItem} onRemoveItem={onRemoveItem} />,
+    <ToDoList
+      key={1}
+      id="1"
+      todo={exampleToDo}
+      onNewItem={onNewItem}
+      onRemoveItem={onRemoveItem}
+      onListUpdate={onListUpdate}
+    />,
   );
 
   fireEvent.change(getByPlaceholderText('Add New Item'), {

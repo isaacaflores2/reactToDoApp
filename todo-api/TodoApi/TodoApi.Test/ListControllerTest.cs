@@ -103,7 +103,7 @@ namespace TodoApi.Test
             };
 
             //Act
-            var result = controller.Update("1", updatedList) as NoContentResult;            
+            var result = controller.Update(updatedList) as NoContentResult;            
 
             //Assert
             Assert.IsInstanceOfType(result, typeof(NoContentResult));
@@ -126,7 +126,7 @@ namespace TodoApi.Test
             };
 
             //Act
-            var result = controller.Update("3", updatedList) as NotFoundResult;
+            var result = controller.Update(updatedList) as NotFoundResult;
 
             //Assert
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));

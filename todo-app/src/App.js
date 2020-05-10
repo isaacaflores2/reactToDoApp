@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
 import './scss/custom.scss';
+import { ObjectID } from 'mongodb';
 import ToDoList from './components/ToDoList/ToDoList';
 import NavBar from './components/NavBar/NavBar';
 import ToDo from './modules/ToDo';
-import API from './services/ToDoService';
+import ToDoService from './services/ToDoService';
 import SideBar from './components/SideBar/SideBar';
 import FormWithIcon from './components/FormWithIcon/FormWithIcon';
 
@@ -19,6 +20,7 @@ class App extends React.Component {
     this.handleSelectList = this.handleSelectList.bind(this);
     this.handleRemoveList = this.handleRemoveList.bind(this);
     this.handleToggleSideBar = this.handleToggleSideBar.bind(this);
+    this.handleListUpdate = this.handleListUpdate.bind(this);
 
     this.state = {
       todos: [],
@@ -29,38 +31,32 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    const jsonTodos = await API.getTodos();
-    const todos = this.createToDoObjectsFromJson(jsonTodos);
+    const jsonTodos = await ToDoService.getTodos();
+    const todos = ToDo.createToDoArrayFromJson(jsonTodos);
     this.setState({ todos });
-  }
-
-
-  createToDoObjectsFromJson(json) {
-    const todos = [];
-    for (let i = 0; i < json.length; i += 1) {
-      todos.push(ToDo.fromJson(json[i]));
-    }
-    return todos;
   }
 
   handleTodoNameChange(event) {
     this.setState({ newTodoName: event.target.value });
   }
 
-  handleNewList(event) {
+  async handleNewList(event) {
     event.preventDefault();
 
     if (this.state.newTodoName.length === 0) {
       return;
     }
 
-    this.setState((state) => {
-      const newId = state.todos.length.toString();
-      const newTodo = new ToDo(
-        newId,
-        state.newTodoName,
-      );
+    const newTodo = new ToDo(
+      new ObjectID().toString(),
+      this.state.newTodoName,
+    );
 
+    const response = await ToDoService.addTodo(newTodo);
+    const ok = await response.ok;
+
+    this.setState((state) => {
+      console.log(newTodo);
       return {
         todos: [newTodo].concat(state.todos),
         newTodoName: '',
@@ -111,6 +107,10 @@ class App extends React.Component {
     this.setState((state) => ({
       sideBarIsCollapsed: !state.sideBarIsCollapsed,
     }));
+  }
+
+  async handleListUpdate(todo) {
+    await ToDoService.updateTodo(todo);
   }
 
   render() {
@@ -166,6 +166,7 @@ class App extends React.Component {
                 todo={todo}
                 onNewItem={this.handleAddItem}
                 onRemoveItem={this.handleRemoveItem}
+                onListUpdate={this.handleListUpdate}
               />
               )}
               </main>

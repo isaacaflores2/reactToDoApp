@@ -9,21 +9,20 @@ class ToDoItem extends React.Component {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
-    this.state = { isChecked: false };
   }
 
   handleChange(event) {
-    this.setState({ isChecked: event.target.checked });
+    this.props.onChecked(this.props.item.id, event.target.checked);
   }
 
   handleRemoveItem() {
+    // TODO: Update database
     this.props.onRemoveItem(this.props.item.id);
   }
 
   render() {
-    const { isChecked } = this.state;
     const { item } = this.props;
-    const itemClass = isChecked ? 'item-complete' : '';
+    const itemClass = item.isChecked ? 'item-complete' : '';
 
     return (
       <div className="row flex-nowrap align-items-center">
@@ -33,7 +32,7 @@ class ToDoItem extends React.Component {
             data-testid={`checkbox-${item.id}`}
             id={`${item.id}`}
             value={item.name}
-            checked={item.ischecked}
+            checked={item.isChecked}
             size="small"
             color="primary"
             onChange={this.handleChange}
@@ -51,6 +50,7 @@ class ToDoItem extends React.Component {
 ToDoItem.propTypes = {
   item: PropTypes.instanceOf(Item).isRequired,
   onRemoveItem: PropTypes.func.isRequired,
+  onChecked: PropTypes.func.isRequired,
 };
 
 export default ToDoItem;

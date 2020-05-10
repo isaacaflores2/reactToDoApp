@@ -41,13 +41,14 @@ namespace TodoApi.Controllers
         {
             listService.Create(list);
 
-            return CreatedAtRoute("GetList", new {id=list.Id.ToString()}, list);
+            return CreatedAtRoute("GetList", new {id=list.Id}, list);
         }
 
         // PUT: api/v1/lists
-        [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, ToDoList updatedList)
+        [HttpPut]
+        public IActionResult Update(ToDoList updatedList)
         {
+            string id = updatedList.Id;
             var list = listService.Get(id);
 
             if( list == null)

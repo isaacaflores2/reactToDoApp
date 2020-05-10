@@ -12,6 +12,8 @@ class ToDoList extends React.Component {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleNewItem = this.handleNewItem.bind(this);
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleChecked = this.handleChecked.bind(this);
 
     this.state = { itemText: '' };
   }
@@ -40,6 +42,21 @@ class ToDoList extends React.Component {
     this.props.onRemoveItem(this.props.id, itemId);
   }
 
+  handleUpdate() {
+    const { onListUpdate, todo } = this.props;
+    onListUpdate(todo);
+  }
+
+  handleChecked(id, isChecked) {
+    const { onListUpdate, todo } = this.props;
+    console.log(todo);
+    const updatedItems = todo.items.map((item) => { if (id === item.id) { item.isChecked = isChecked; } return item; });
+    todo.items = updatedItems;
+    console.log('ischecked update. new todo: ');
+    console.log(todo);
+    onListUpdate(todo);
+  }
+
   render() {
     const { itemText } = this.state;
     const { todo } = this.props;
@@ -48,7 +65,7 @@ class ToDoList extends React.Component {
 
         {todo.items.map((item) => (
           <ListCard key={`${item.name}-${item.id}`}>
-            <ToDoItem item={item} onRemoveItem={this.handleRemoveItem} />
+            <ToDoItem item={item} onRemoveItem={this.handleRemoveItem} onChecked={this.handleChecked} />
           </ListCard>
         ),
         )}
@@ -70,7 +87,9 @@ class ToDoList extends React.Component {
 ToDoList.propTypes = {
   id: PropTypes.string.isRequired,
   todo: PropTypes.instanceOf(ToDo).isRequired,
+  onNewItem: PropTypes.func.isRequired,
   onRemoveItem: PropTypes.func.isRequired,
+  onListUpdate: PropTypes.func.isRequired,
 };
 
 export default ToDoList;

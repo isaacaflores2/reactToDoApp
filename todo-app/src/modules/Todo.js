@@ -15,6 +15,10 @@ export default class ToDo {
 
   removeItem(id) {
     const index = this.items.findIndex((item) => item.id === id);
+    if (index < 0) {
+      throw `Item with id ${id} does not exist. Cannot remove. `;
+    }
+
     this.items.splice(index, 1);
   }
 

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import './ToDoItem.css';
 import Checkbox from '@material-ui/core/Checkbox';
 import Item from '../../modules/Item';
+import ContextMenu from '../ContextMenu/ContextMenu';
+import Menu from '../Menu/Menu';
 
 class ToDoItem extends React.Component {
   constructor(props) {
@@ -39,7 +41,7 @@ class ToDoItem extends React.Component {
             inputProps={{ 'aria-label': 'primary checkbox', 'data-testid': `clickable-checkbox-${item.id}` }}
           />
         </div>
-        <div data-testid="item-name" className={`col-10 text-truncate ${itemClass}`}>
+        <div data-testid="item-name" className={`col-10 text-truncate ${itemClass}`} id={item.id}>
           {`${item.name}`}
         </div>
       </div>

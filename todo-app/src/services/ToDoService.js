@@ -26,4 +26,15 @@ export default class ToDoService {
     });
     return response;
   }
+
+  static async removeTodo(id) {
+    const response = await fetch('https://localhost:5001/api/v1/lists', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(id),
+    });
+    return response;
+  }
 }

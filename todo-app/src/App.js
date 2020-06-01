@@ -8,6 +8,8 @@ import ToDo from './modules/ToDo';
 import ToDoService from './services/ToDoService';
 import SideBar from './components/SideBar/SideBar';
 import FormWithIcon from './components/FormWithIcon/FormWithIcon';
+import ContextMenu from './components/ContextMenu/ContextMenu';
+import Menu from './components/Menu/Menu';
 
 
 class App extends React.Component {
@@ -55,14 +57,11 @@ class App extends React.Component {
     const response = await ToDoService.addTodo(newTodo);
     const ok = await response.ok;
 
-    this.setState((state) => {
-      console.log(newTodo);
-      return {
-        todos: [newTodo].concat(state.todos),
-        newTodoName: '',
-        todoToDisplayIndex: 0,
-      };
-    });
+    this.setState((state) => ({
+      todos: [newTodo].concat(state.todos),
+      newTodoName: '',
+      todoToDisplayIndex: 0,
+    }));
   }
 
   handleSelectList(listId) {
@@ -70,17 +69,18 @@ class App extends React.Component {
     this.setState({ todoToDisplayIndex: index });
   }
 
-  handleRemoveList(listId) {
-    this.setState((state) => {
-      const listIndex = state.todos.findIndex((todo) => todo.id === listId);
-      const updatedTodos = state.todos;
-      updatedTodos.splice(listIndex, 1);
+  async handleRemoveList(listId) {
+    const listIndex = this.state.todos.findIndex((todo) => todo.id === listId);
+    const updatedTodos = this.state.todos;
+    updatedTodos.splice(listIndex, 1);
 
-      return {
-        todos: updatedTodos,
-        todoToDisplayId: 0,
-      };
-    });
+    const response = await ToDoService.removeTodo(listId);
+    const ok = await response.ok;
+
+    this.setState((state) => ({
+      todos: updatedTodos,
+      todoToDisplayId: 0,
+    }));
   }
 
   handleAddItem(listId, value) {
@@ -95,12 +95,14 @@ class App extends React.Component {
     });
   }
 
-  handleRemoveItem(todoListId, itemId) {
-    this.setState((state) => {
-      const updatedTodos = state.todos;
-      updatedTodos[todoListId].removeItem(itemId);
-      return { todos: updatedTodos };
-    });
+  handleRemoveItem(listId, itemId) {
+    const index = this.state.todos.findIndex((todo) => todo.id === listId);
+    const updatedTodos = this.state.todos;
+    updatedTodos[index].removeItem(itemId);
+
+    this.handleListUpdate(updatedTodos[index]);
+
+    this.setState({ todos: updatedTodos });
   }
 
   handleToggleSideBar() {
@@ -110,7 +112,8 @@ class App extends React.Component {
   }
 
   async handleListUpdate(todo) {
-    await ToDoService.updateTodo(todo);
+    const response = await ToDoService.updateTodo(todo);
+    const ok = await response.ok;
   }
 
   render() {

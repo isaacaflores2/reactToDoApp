@@ -4,7 +4,8 @@ import ToDoItem from '../ToDoItem/ToDoItem';
 import ToDo from '../../modules/ToDo';
 import FormWithIcon from '../FormWithIcon/FormWithIcon';
 import ListCard from '../ListCard/ListCard';
-
+import ContextMenu from '../ContextMenu/ContextMenu';
+import Menu from '../Menu/Menu';
 
 class ToDoList extends React.Component {
   constructor(props) {
@@ -52,8 +53,6 @@ class ToDoList extends React.Component {
     console.log(todo);
     const updatedItems = todo.items.map((item) => { if (id === item.id) { item.isChecked = isChecked; } return item; });
     todo.items = updatedItems;
-    console.log('ischecked update. new todo: ');
-    console.log(todo);
     onListUpdate(todo);
   }
 
@@ -61,25 +60,29 @@ class ToDoList extends React.Component {
     const { itemText } = this.state;
     const { todo } = this.props;
     return (
-      <div data-testid={`todolist-${todo.name}`} className="row">
+      <ContextMenu menu={({ mouseX, mouseY, targetId }) => (
+        <Menu onEdit={() => console.log(`edit target: ${targetId}`)} onRemove={() => this.handleRemoveItem(targetId)} top={mouseY - 60} left={mouseX - 40} />)}
+      >
+        <div data-testid={`todolist-${todo.name}`} className="row">
 
-        {todo.items.map((item) => (
-          <ListCard key={`${item.name}-${item.id}`}>
-            <ToDoItem item={item} onRemoveItem={this.handleRemoveItem} onChecked={this.handleChecked} />
+          {todo.items.map((item) => (
+            <ListCard key={`${item.name}-${item.id}`}>
+              <ToDoItem item={item} onRemoveItem={this.handleRemoveItem} onChecked={this.handleChecked} />
+            </ListCard>
+          ),
+          )}
+
+          <ListCard>
+            <FormWithIcon
+              data-testid="list-form"
+              text={itemText}
+              onSubmit={this.handleNewItem}
+              onChange={this.handleTextChange}
+              placeholder="Add New Item"
+            />
           </ListCard>
-        ),
-        )}
-
-        <ListCard>
-          <FormWithIcon
-            data-testid="list-form"
-            text={itemText}
-            onSubmit={this.handleNewItem}
-            onChange={this.handleTextChange}
-            placeholder="Add New Item"
-          />
-        </ListCard>
-      </div>
+        </div>
+      </ContextMenu>
     );
   }
 }

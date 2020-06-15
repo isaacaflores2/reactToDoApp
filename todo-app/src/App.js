@@ -114,6 +114,8 @@ class App extends React.Component {
   async handleListUpdate(todo) {
     const response = await ToDoService.updateTodo(todo);
     const ok = await response.ok;
+
+    this.setState({ todos: todo });
   }
 
   render() {

@@ -33,6 +33,16 @@ test('ToDo removeItem', () => {
   expect(todo.items.length).toBe(0);
 });
 
+
+test('ToDo updateItem', () => {
+  const todo = new ToDo(1, 'Test ToDo');
+
+  todo.addItem('test item');
+  todo.updateItem(0, 'test item Updated');
+
+  expect(todo.items[0].name).toBe('test item Updated');
+});
+
 test('ToDo fromJson', () => {
   const json = {
     id: 2,

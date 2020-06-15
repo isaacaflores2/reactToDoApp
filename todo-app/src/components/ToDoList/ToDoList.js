@@ -15,8 +15,13 @@ class ToDoList extends React.Component {
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleChecked = this.handleChecked.bind(this);
+    this.startEditMode = this.startEditMode.bind(this);
+    this.endEditMode = this.endEditMode.bind(this);
+    this.handleItemEdit = this.handleItemEdit.bind(this);
+    this.updateItemName = this.updateItemName.bind(this);
+    this.handleEditItemTextChange = this.handleEditItemTextChange.bind(this);
 
-    this.state = { itemText: '' };
+    this.state = { itemText: '', editItemText: '', editItemId: null };
   }
 
   handleTextChange(event) {
@@ -56,21 +61,72 @@ class ToDoList extends React.Component {
     onListUpdate(todo);
   }
 
+  startEditMode(targetId) {
+    const editItem = this.props.todo.items.find((item) => item.id === targetId);
+    const editItemCurrentText = editItem.name;
+    this.setState({ editItemText: editItemCurrentText, editItemId: targetId });
+  }
+
+  endEditMode() {
+    this.setState({ editItemText: '', editItemId: null });
+  }
+
+  updateItemName(id, newName) {
+    const { onListUpdate, todo } = this.props;
+    console.log(todo);
+    const updatedItems = todo.items.map((item) => { if (id === item.id) { item.name = newName; } return item; });
+    todo.items = updatedItems;
+    onListUpdate(todo);
+  }
+
+  handleItemEdit(event) {
+    event.preventDefault();
+
+    if (this.state.editItemText.length === 0) {
+      this.endEditMode();
+      return;
+    }
+
+    const { id } = event.target;
+    const newItemName = this.state.editItemText;
+    this.updateItemName(id, newItemName);
+    this.endEditMode();
+  }
+
+  handleEditItemTextChange(event) {
+    this.setState({ editItemText: event.target.value });
+  }
+
+
   render() {
-    const { itemText } = this.state;
+    const { itemText, editItemText, editItemId } = this.state;
     const { todo } = this.props;
     return (
       <ContextMenu menu={({ mouseX, mouseY, targetId }) => (
-        <Menu onEdit={() => console.log(`edit target: ${targetId}`)} onRemove={() => this.handleRemoveItem(targetId)} top={mouseY - 60} left={mouseX - 40} />)}
+        <Menu onEdit={() => this.startEditMode(targetId)} onRemove={() => this.handleRemoveItem(targetId)} top={mouseY - 60} left={mouseX - 40} />)}
       >
         <div data-testid={`todolist-${todo.name}`} className="row">
+          {todo.items.map((item) => {
+            if (editItemId === item.id) {
+              return (
+                <ListCard key={`${item.name}-${item.id}`}>
+                  <FormWithIcon
+                    data-testid="edit-item-form"
+                    text={editItemText}
+                    onSubmit={this.handleItemEdit}
+                    onChange={this.handleEditItemTextChange}
+                    placeholder={editItemText}
+                  />
+                </ListCard>
+              );
+            }
 
-          {todo.items.map((item) => (
-            <ListCard key={`${item.name}-${item.id}`}>
-              <ToDoItem item={item} onRemoveItem={this.handleRemoveItem} onChecked={this.handleChecked} />
-            </ListCard>
-          ),
-          )}
+            return (
+              <ListCard key={`${item.name}-${item.id}`}>
+                <ToDoItem item={item} onRemoveItem={this.handleRemoveItem} onChecked={this.handleChecked} />
+              </ListCard>
+            );
+          })}
 
           <ListCard>
             <FormWithIcon

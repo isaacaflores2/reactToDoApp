@@ -22,6 +22,15 @@ export default class ToDo {
     this.items.splice(index, 1);
   }
 
+  updateItem(id, updatedName) {
+    const index = this.items.findIndex((item) => item.id === id);
+    if (index < 0) {
+      throw `Item with id ${id} does not exist. Cannot update. `;
+    }
+
+    this.items[index].name = updatedName;
+  }
+
   static fromJson(json) {
     const todo = new ToDo(json.id, json.name);
     for (let i = 0; i < json.items.length; i += 1) {

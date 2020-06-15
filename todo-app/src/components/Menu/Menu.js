@@ -7,8 +7,8 @@ const Menu = (props) => {
   } = props;
   return (
     <div className="dropdown-menu" style={{ top, left, display: 'block' }}>
-      <a data-testid="edit-menu-item" className="dropdown-item" href="#" onClick={onEdit}>Edit</a>
-      <a data-testid="remove-menu-item" className="dropdown-item" href="#" onClick={onRemove}>Remove</a>
+      <button data-testid="edit-menu-item" className="dropdown-item" href="#" onClick={onEdit} type="button">Edit</button>
+      <button data-testid="remove-menu-item" className="dropdown-item" href="#" onClick={onRemove} type="button">Remove</button>
     </div>
   );
 };

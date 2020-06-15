@@ -12,7 +12,7 @@ test('<ToDoItem/>', () => {
   const { getByTestId, queryAllByTestId } = render(<ToDoItem item={item} onRemoveItem={onRemoveItem} onChecked={onChecked} />);
 
   expect(queryAllByTestId('checkbox')).toBeTruthy();
-  expect(getByTestId('item-name').textContent).toBe('Test Item');
+  expect(getByTestId('item-name-0').textContent).toBe('Test Item');
 });
 
 test('<ToDoItem/> change label class on check', () => {
@@ -24,7 +24,7 @@ test('<ToDoItem/> change label class on check', () => {
   item.isChecked = true;
   rerender(<ToDoItem item={item} onRemoveItem={onRemoveItem} onChecked={onChecked} />);
 
-  expect(getByTestId('item-name').classList.contains('item-complete')).toBe(true);
+  expect(getByTestId('item-name-0').classList.contains('item-complete')).toBe(true);
 
   // fireEvent.click(getByTestId('remove-icon'));
   // expect(onRemoveItem).toBeCalledTimes(1);

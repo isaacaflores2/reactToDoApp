@@ -18,7 +18,6 @@ class ToDoItem extends React.Component {
   }
 
   handleRemoveItem() {
-    // TODO: Update database
     this.props.onRemoveItem(this.props.item.id);
   }
 
@@ -41,7 +40,7 @@ class ToDoItem extends React.Component {
             inputProps={{ 'aria-label': 'primary checkbox', 'data-testid': `clickable-checkbox-${item.id}` }}
           />
         </div>
-        <div data-testid="item-name" className={`col-10 text-truncate ${itemClass}`} id={item.id}>
+        <div data-testid={`item-name-${item.id}`} className={`col-10 text-truncate ${itemClass}`} id={item.id}>
           {`${item.name}`}
         </div>
       </div>
@@ -55,25 +54,5 @@ ToDoItem.propTypes = {
   onChecked: PropTypes.func.isRequired,
 };
 
+
 export default ToDoItem;
-
-
-{ /* <Grid container spacing={1} alignItems="center" wrap="nowrap">
-            <Grid item>
-              <Checkbox
-                data-testid="checkbox"
-                id={id}
-                value={name}
-                checked={isChecked}
-                size="small"
-                color="primary"
-                onChange={this.handleChange}
-                inputProps={{ 'aria-label': 'primary checkbox' }}
-              />
-            </Grid>
-            <Grid item xs zeroMinWidth className={`${itemClass}`}>
-              <Typography noWrap>
-                {name}
-              </Typography>
-            </Grid>
-          </Grid> */ }

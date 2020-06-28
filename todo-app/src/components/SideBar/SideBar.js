@@ -14,8 +14,7 @@ class SideBar extends Component {
     this.state = { isCollapsed: true };
   }
 
-  handleSelectList(event) {
-    const id = Number(event.target.id, 10);
+  handleSelectList(id) {
     this.props.onTodoSelect(id);
   }
 
@@ -38,7 +37,7 @@ class SideBar extends Component {
           { todos.map((todo) => (
             <li key={`${todo.name}-${todo.id}`} className="list-group-item list-group-item-action border-0 px-0 text-light bg-dark">
               <ListNavItem
-                id={todo.id}
+                id={`${todo.id}`}
                 name={todo.name}
                 onSelect={this.handleSelectList}
                 onRemoveList={this.handleRemoveList}

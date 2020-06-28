@@ -8,14 +8,14 @@ const onSelect = jest.fn();
 
 
 test('<ListNavItem/>', () => {
-  const { getByText, queryAllByTestId } = render(<ListNavItem name="List One" id={0} onSelect={onSelect} onRemoveList={onRemoveList} />);
+  const { getByText, queryAllByTestId } = render(<ListNavItem name="List One" id="0" onSelect={onSelect} onRemoveList={onRemoveList} />);
 
   expect(getByText('List One')).toBeInTheDocument();
   // expect(queryAllByTestId('list-remove-icon-0').length).toBeTruthy();
 });
 
 test('<ListNavItem/> click item', () => {
-  const { getByText } = render(<ListNavItem name="List One" id={0} onSelect={onSelect} onRemoveList={onRemoveList} />);
+  const { getByText } = render(<ListNavItem name="List One" id="0" onSelect={onSelect} onRemoveList={onRemoveList} />);
 
   fireEvent.click(getByText('List One'));
 

@@ -24,6 +24,9 @@ module.exports = {
   "rules": {
     "react/jsx-filename-extension": 0,
     "function-paren-newline": 0,
-    "linebreak-style": 0
+    "linebreak-style": 0,
+    "eslint-disable-next-line": 0,
+    "react/sort-comp": 0,
+    "class-methods-use-this" : 0,
   }
 };

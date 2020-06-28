@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+todo-api/TodoApi/.vs/TodoApi/v16/
+todo-app/.vscode/launch.json
+todo-api/TodoApi/TodoApi.Test/obj/Debug/
+todo-api/TodoApi/TodoApi/obj/Debug/
+todo-api/TodoApi/TodoApi/obj/project.nuget.cache
+todo-api/TodoApi/.vs/
+todo-api/TodoApi/TodoApi/bin/Debug/
+

@@ -1,12 +1,16 @@
 import React from 'react';
 import './App.css';
 import './scss/custom.scss';
-import PropTypes from 'prop-types';
+import { ObjectID } from 'mongodb';
 import ToDoList from './components/ToDoList/ToDoList';
 import NavBar from './components/NavBar/NavBar';
 import ToDo from './modules/ToDo';
+import ToDoService from './services/ToDoService';
 import SideBar from './components/SideBar/SideBar';
 import FormWithIcon from './components/FormWithIcon/FormWithIcon';
+import ContextMenu from './components/ContextMenu/ContextMenu';
+import Menu from './components/Menu/Menu';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -18,63 +22,72 @@ class App extends React.Component {
     this.handleSelectList = this.handleSelectList.bind(this);
     this.handleRemoveList = this.handleRemoveList.bind(this);
     this.handleToggleSideBar = this.handleToggleSideBar.bind(this);
+    this.handleListUpdate = this.handleListUpdate.bind(this);
 
     this.state = {
-      todos: this.props.todos,
-      todoToDisplayId: 0,
+      todos: [],
+      todoToDisplayIndex: 0,
       newTodoName: '',
       sideBarIsCollapsed: true,
     };
+  }
+
+  async componentDidMount() {
+    const jsonTodos = await ToDoService.getTodos();
+    const todos = ToDo.createToDoArrayFromJson(jsonTodos);
+    this.setState({ todos });
   }
 
   handleTodoNameChange(event) {
     this.setState({ newTodoName: event.target.value });
   }
 
-  handleNewList(event) {
+  async handleNewList(event) {
     event.preventDefault();
 
     if (this.state.newTodoName.length === 0) {
       return;
     }
 
-    this.setState((state) => {
-      const newId = state.todos.length;
-      const newTodo = new ToDo(
-        newId,
-        state.newTodoName,
-      );
+    const newTodo = new ToDo(
+      new ObjectID().toString(),
+      this.state.newTodoName,
+    );
 
-      return {
-        todos: [newTodo].concat(state.todos),
-        newTodoName: '',
-        todoToDisplayId: 0,
-      };
-    });
+    const response = await ToDoService.addTodo(newTodo);
+    const ok = await response.ok;
+
+    this.setState((state) => ({
+      todos: [newTodo].concat(state.todos),
+      newTodoName: '',
+      todoToDisplayIndex: 0,
+    }));
   }
 
   handleSelectList(listId) {
     const index = this.state.todos.findIndex((todo) => todo.id === listId);
-    this.setState({ todoToDisplayId: index });
+    this.setState({ todoToDisplayIndex: index });
   }
 
-  handleRemoveList(listId) {
+  async handleRemoveList(listId) {
+    const listIndex = this.state.todos.findIndex((todo) => todo.id === listId);
+    const updatedTodos = this.state.todos;
+    updatedTodos.splice(listIndex, 1);
+
+    const response = await ToDoService.removeTodo(listId);
+    const ok = await response.ok;
+
+    this.setState((state) => ({
+      todos: updatedTodos,
+      todoToDisplayId: 0,
+    }));
+  }
+
+  handleAddItem(listId, value) {
     this.setState((state) => {
       const listIndex = state.todos.findIndex((todo) => todo.id === listId);
       const updatedTodos = state.todos;
-      updatedTodos.splice(listIndex, 1);
-
-      return {
-        todos: updatedTodos,
-        todoToDisplayId: 0,
-      };
-    });
-  }
-
-  handleAddItem(todoListId, value) {
-    this.setState((state) => {
-      const updatedTodos = state.todos;
-      updatedTodos[todoListId].addItem(value);
+      updatedTodos[listIndex].addItem(value);
 
       return {
         todos: updatedTodos,
@@ -82,12 +95,14 @@ class App extends React.Component {
     });
   }
 
-  handleRemoveItem(todoListId, itemId) {
-    this.setState((state) => {
-      const updatedTodos = state.todos;
-      updatedTodos[todoListId].removeItem(itemId);
-      return { todos: updatedTodos };
-    });
+  handleRemoveItem(listId, itemId) {
+    const index = this.state.todos.findIndex((todo) => todo.id === listId);
+    const updatedTodos = this.state.todos;
+    updatedTodos[index].removeItem(itemId);
+
+    this.handleListUpdate(updatedTodos[index]);
+
+    this.setState({ todos: updatedTodos });
   }
 
   handleToggleSideBar() {
@@ -96,11 +111,27 @@ class App extends React.Component {
     }));
   }
 
+  async handleListUpdate(updatedTodo) {
+    const { todos } = this.state;
+    const response = await ToDoService.updateTodo(updatedTodo);
+    const ok = await response.ok;
+
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === updatedTodo.id) {
+        return updatedTodo;
+      }
+
+      return todo;
+    });
+
+    this.setState({ todos: updatedTodos });
+  }
+
   render() {
     const {
-      todos, todoToDisplayId, newTodoName, sideBarIsCollapsed,
+      todos, todoToDisplayIndex, newTodoName, sideBarIsCollapsed,
     } = this.state;
-
+    const todo = todos[todoToDisplayIndex];
     return (
       <>
         <div className="container-fluid px-0">
@@ -119,9 +150,6 @@ class App extends React.Component {
                 isCollapsed={sideBarIsCollapsed}
                 onToggle={this.handleToggleSideBar}
               >
-                {/* <form className="" onSubmit={this.handleNewList}>
-                  <input className="form-control mr-sm-2 bg-transparent text-light" placeholder="My new ToDo list" id="newTodoList" onChange={this.handleTodoNameChange} value={newTodoName} />
-                </form> */}
                 <FormWithIcon
                   text={newTodoName}
                   inputClassName="text-light"
@@ -138,7 +166,7 @@ class App extends React.Component {
                 {todos.length > 0
                 && (
                 <div className="col">
-                  <h1 className="display-3 font-italic">{todos[todoToDisplayId].name}</h1>
+                  <h1 className="display-3 font-italic">{todo.name}</h1>
                 </div>
                 )}
               </div>
@@ -147,11 +175,12 @@ class App extends React.Component {
                 {todos.length > 0
               && (
               <ToDoList
-                key={todoToDisplayId}
-                id={todoToDisplayId}
-                todo={todos[todoToDisplayId]}
+                key={todoToDisplayIndex}
+                id={todo.id}
+                todo={todo}
                 onNewItem={this.handleAddItem}
                 onRemoveItem={this.handleRemoveItem}
+                onListUpdate={this.handleListUpdate}
               />
               )}
               </main>
@@ -162,9 +191,5 @@ class App extends React.Component {
     );
   }
 }
-
-App.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.instanceOf(ToDo)).isRequired,
-};
 
 export default App;

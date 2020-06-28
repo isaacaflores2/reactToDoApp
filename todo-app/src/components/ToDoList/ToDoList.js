@@ -75,8 +75,10 @@ class ToDoList extends React.Component {
     const { onListUpdate, todo } = this.props;
     console.log(todo);
     const updatedItems = todo.items.map((item) => { if (id === item.id) { item.name = newName; } return item; });
-    todo.items = updatedItems;
-    onListUpdate(todo);
+    const currentTodo = todo;
+    currentTodo.items = updatedItems;
+
+    onListUpdate(currentTodo);
   }
 
   handleItemEdit(event) {
@@ -87,9 +89,8 @@ class ToDoList extends React.Component {
       return;
     }
 
-    const { id } = event.target;
-    const newItemName = this.state.editItemText;
-    this.updateItemName(id, newItemName);
+    const { editItemId, editItemText } = this.state;
+    this.updateItemName(editItemId, editItemText);
     this.endEditMode();
   }
 

@@ -6,10 +6,10 @@ import App from './App';
 import ToDoService from './services/ToDoService';
 import '@testing-library/jest-dom/extend-expect';
 
-const expectedTodoJson = [{
+const expectedTodosJson = [{
   id: '0',
   name: 'List One',
-  items: [{ id: 0, name: 'Item1', isChecked: false }, { id: 0, name: 'Item2', isChecked: true }],
+  items: [{ id: 0, name: 'Item1', isChecked: false }, { id: 1, name: 'Item2', isChecked: true }],
 }, {
   id: '1',
   name: 'List Two',
@@ -23,8 +23,9 @@ const expectedTodoJson = [{
 const mockResponse = { status: 200, ok: true };
 
 ToDoService.getTodos = jest.fn();
-ToDoService.getTodos.mockResolvedValue(expectedTodoJson);
+ToDoService.getTodos.mockResolvedValue(expectedTodosJson);
 ToDoService.updateTodo = jest.fn();
+ToDoService.updateTodo.mockResolvedValue(mockResponse);
 ToDoService.addTodo = jest.fn();
 ToDoService.addTodo.mockResolvedValue(mockResponse);
 
@@ -103,4 +104,21 @@ test('<App/> add new list', async () => {
   fireEvent.submit(getByPlaceholderText('Add New List'));
 
   await wait(() => expect(getByTestId('todolist-title')).toHaveTextContent('List Four'));
+});
+
+
+test('<App/> edit item', async () => {
+  const { getByTestId, getByPlaceholderText, debug } = render(<App />);
+
+  await wait(() => expect(ToDoService.getTodos).toHaveBeenCalledTimes(1));
+  // Edit Item
+  fireEvent.contextMenu(getByTestId('item-name-0'));
+  fireEvent.click(getByTestId('edit-menu-item'));
+  fireEvent.change(getByPlaceholderText('Item1'), {
+    target: { value: 'Item1 has been edited' },
+  });
+  fireEvent.click(getByTestId('add-icon-for-Item1 has been edited'));
+  await wait(() => expect(ToDoService.updateTodo).toHaveBeenCalledTimes(1));
+  debug();
+  expect(getByTestId('item-name-0').textContent).toBe('Item1 has been edited');
 });

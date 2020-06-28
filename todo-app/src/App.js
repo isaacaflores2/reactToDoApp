@@ -111,11 +111,20 @@ class App extends React.Component {
     }));
   }
 
-  async handleListUpdate(todo) {
-    const response = await ToDoService.updateTodo(todo);
+  async handleListUpdate(updatedTodo) {
+    const { todos } = this.state;
+    const response = await ToDoService.updateTodo(updatedTodo);
     const ok = await response.ok;
 
-    this.setState({ todos: todo });
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === updatedTodo.id) {
+        return updatedTodo;
+      }
+
+      return todo;
+    });
+
+    this.setState({ todos: updatedTodos });
   }
 
   render() {

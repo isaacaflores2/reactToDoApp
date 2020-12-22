@@ -3,7 +3,7 @@
 A Simple to do list using React! The web app allows you to add your own todo list and items per list. 
 
 # Motivation
-I decided to create this project so I could quickly learn React basics. 
+I decided to create this project so I could quickly learn React and MongoDB. 
 
 # Screenshots
 ![](imgs/todo-app-screenshot.png)

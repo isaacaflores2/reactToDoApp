@@ -13,6 +13,8 @@ I decided to create this project so I could quickly learn React and MongoDB.
 1. [React](https://reactjs.org/)
 2. [Create React App](https://create-react-app.dev/)
 3. [React Testing Library](https://github.com/testing-library/react-testing-library)
+4. ASP.NET Core Web API
+5. MongoDB
 
 # License
 MIT License
